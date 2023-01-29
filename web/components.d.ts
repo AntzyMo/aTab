@@ -8,7 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ArrowDownIcon: typeof import('./src/components/icon/ArrowDownIcon.vue')['default']
-    CloseIcon: typeof import('./src/components/icon/closeIcon.vue')['default']
+    CloseIcon: typeof import('./src/components/icon/CloseIcon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchIcon: typeof import('./src/components/icon/SearchIcon.vue')['default']
