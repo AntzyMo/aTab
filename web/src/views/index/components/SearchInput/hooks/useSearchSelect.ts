@@ -20,10 +20,29 @@ export default () => {
     searchSelectValue.value = idx
   }
 
+  // 按住 ctrl + 方向键下 切换搜索引擎
+  const keyCtrlDown = () => {
+    if (searchSelectValue.value >= searchUrlMap.value.length - 1) {
+      searchSelectValue.value = 0
+    } else {
+      searchSelectValue.value++
+    }
+  }
+
+  // 按住 ctrl + 方向键上 切换搜索引擎
+  const keyCtrlUp = () => {
+    searchSelectValue.value--
+    if (searchSelectValue.value < 0) {
+      searchSelectValue.value = searchUrlMap.value.length - 1
+    }
+  }
+
   return {
     searchSelectValue,
     searchUrlMap,
     selectUrl,
-    showSearchselect
+    showSearchselect,
+    keyCtrlDown,
+    keyCtrlUp
   }
 }
