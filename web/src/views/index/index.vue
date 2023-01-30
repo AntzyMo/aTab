@@ -8,7 +8,14 @@
 
   const { tabMap, save, getchreom } = useTab()
   const { showRightMenu, rightClick, mouseXY } = useRightMemu()
-  console.log('mouseXY', mouseXY)
+
+  // 监听页面进入
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      showRightMenu.value = false
+      document.querySelector<HTMLInputElement>('#searchInput')?.focus()
+    }
+  })
 </script>
 
 <template>

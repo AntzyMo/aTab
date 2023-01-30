@@ -25,10 +25,8 @@
       }
     }
 
-    const rightOverflow =
-      document.body.clientWidth - rightMemuRef.value.offsetWidth
-    const bottomOverflow =
-      document.body.clientHeight - rightMemuRef.value.offsetHeight
+    const rightOverflow = document.body.clientWidth - rightMemuRef.value.offsetWidth
+    const bottomOverflow = document.body.clientHeight - rightMemuRef.value.offsetHeight
 
     const left = x > rightOverflow ? rightOverflow : x
     const bottom = y > bottomOverflow ? bottomOverflow : y

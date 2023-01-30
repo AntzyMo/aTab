@@ -8,14 +8,7 @@
   import useSearchSelect from './hooks/useSearchSelect'
 
   const serachValue = ref('')
-  const {
-    searchSelectValue,
-    showSearchselect,
-    keyCtrlDown,
-    searchUrlMap,
-    selectUrl,
-    keyCtrlUp
-  } = useSearchSelect()
+  const { searchSelectValue, showSearchselect, keyCtrlDown, searchUrlMap, selectUrl, keyCtrlUp } = useSearchSelect()
 
   // 回车搜索
   const confrim = () => {
@@ -36,6 +29,7 @@
       </div>
       <div class="input-box">
         <input
+          id="searchInput"
           v-model.trim="serachValue"
           placeholder="请输入您要搜索的内容"
           @keyup.enter="confrim"
