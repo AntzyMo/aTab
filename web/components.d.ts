@@ -7,11 +7,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AddIcon: typeof import('./src/components/icon/AddIcon.vue')['default']
     ArrowDownIcon: typeof import('./src/components/icon/ArrowDownIcon.vue')['default']
     CloseIcon: typeof import('./src/components/icon/CloseIcon.vue')['default']
-    RouterLink: typeof import('vue-router')['RouterLink']
-    RouterView: typeof import('vue-router')['RouterView']
+    RightMemu: typeof import('./src/components/RightMemu/index.vue')['default']
     SearchIcon: typeof import('./src/components/icon/SearchIcon.vue')['default']
-    SearchInput: typeof import('./src/components/searchInput/index.vue')['default']
   }
 }

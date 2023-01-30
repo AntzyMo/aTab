@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Antzy的新标签页",
   "chrome_url_overrides": {
-    "newtab":"web/dist/index.html"
-  }
+    "newtab":"dist/index.html"
+  },
+  "permissions":["storage"]
 }

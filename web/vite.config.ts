@@ -9,7 +9,7 @@ import { defineConfig } from 'vite'
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? './' : '/',
   plugins: [
-    vue(),
+    vue({ reactivityTransform: true }),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),
@@ -21,5 +21,8 @@ export default defineConfig(({ command }) => ({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    outDir: '../chrome/dist'
   }
 }))
