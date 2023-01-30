@@ -85,17 +85,20 @@
       display: flex;
       align-items: center;
       flex: 1;
-      position: relative;
-      overflow: hidden;
+      height: 100%;
+
       .inputPrefix {
         margin-right: 4px;
         display: flex;
         align-items: center;
         width: 50px;
-        height: 50px;
+        height: 100%;
         justify-content: center;
         padding-left: 8px;
         cursor: pointer;
+        border-top-left-radius: 23px;
+        border-bottom-left-radius: 23px;
+        user-select: none;
 
         &:hover {
           background: rgba(255, 255, 255, 0.4);
@@ -136,6 +139,9 @@
         justify-content: center;
         cursor: pointer;
         padding: 0 15px;
+        border-top-right-radius: 23px;
+        border-bottom-right-radius: 23px;
+        user-select: none;
 
         &:hover {
           background: rgba(255, 255, 255, 0.4);
