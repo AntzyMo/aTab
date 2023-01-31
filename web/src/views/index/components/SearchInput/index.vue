@@ -75,7 +75,6 @@
     max-width: 600px;
     height: 46px;
     box-shadow: 0 0 10px 3px #0000001a;
-    backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 23px;
     display: flex;
