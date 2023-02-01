@@ -1,18 +1,21 @@
 <script setup lang="ts">
-  import type { Component } from 'vue'
   import { computed, ref } from 'vue'
+
+  import type { memuItem } from './type'
 
   interface PropsType {
     x: number
     y: number
     open: boolean
-    data: {
-      name: string
-      icon: Component
-    }[]
+    data: memuItem[]
+  }
+
+  interface EmitType {
+    (e: 'clickRightMemuItem', value: memuItem): void
   }
 
   const { x = 0, y, open = false } = defineProps<PropsType>()
+  defineEmits<EmitType>()
 
   const rightMemuRef = ref<HTMLDivElement | null>(null)
 
@@ -50,6 +53,7 @@
       v-for="item in data"
       :key="item.name"
       class="item"
+      @click="$emit('clickRightMemuItem', item)"
     >
       <span>{{ item.name }}</span>
       <component :is="item.icon" />

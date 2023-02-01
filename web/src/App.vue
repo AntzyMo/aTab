@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import App from './views/index/index.vue'
+  import Main from './views/main/index.vue'
 </script>
 
 <template>
-  <App />
+  <Main />
 </template>
