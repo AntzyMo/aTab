@@ -5,9 +5,11 @@
   import CloseIcon from '@/components/icon/CloseIcon.vue'
   import SearchIcon from '@/components/icon/SearchIcon.vue'
 
+  import { pageVisibilitychange } from '../../../../utils/index'
   import useSearchSelect from './hooks/useSearchSelect'
 
   const serachValue = ref('')
+  const searchInput = ref<HTMLInputElement | null>(null)
   const { searchSelectValue, showSearchselect, keyCtrlDown, searchUrlMap, selectUrl, keyCtrlUp } = useSearchSelect()
 
   // 回车搜索
@@ -15,6 +17,12 @@
     const url = searchUrlMap.value[searchSelectValue.value].url
     window.open(url + serachValue.value)
   }
+
+  // 监听页面进入
+  pageVisibilitychange(() => {
+    serachValue.value = ''
+    searchInput.value?.focus()
+  })
 </script>
 
 <template>
@@ -29,7 +37,7 @@
       </div>
       <div class="input-box">
         <input
-          id="searchInput"
+          ref="searchInput"
           v-model.trim="serachValue"
           placeholder="请输入您要搜索的内容"
           @keyup.enter="confrim"

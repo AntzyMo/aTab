@@ -3,6 +3,7 @@
 
   import { useRightMemuStore } from '@/stores'
 
+  import { pageVisibilitychange } from '../../utils/index'
   import RightMemu from './components/RightMemu/index.vue'
   import SearchInput from './components/SearchInput/index.vue'
   import Tab from './components/Tab/index.vue'
@@ -12,11 +13,8 @@
   const { mouseXY } = storeToRefs(useRightMemuStore())
 
   // 监听页面进入
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      showRightMenu.value = false
-      document.querySelector<HTMLInputElement>('#searchInput')?.focus()
-    }
+  pageVisibilitychange(() => {
+    showRightMenu.value = false
   })
 </script>
 
