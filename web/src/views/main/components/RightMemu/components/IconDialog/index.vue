@@ -11,7 +11,7 @@
   import BlueCheckIcon from '@/components/icon/BlueCheckIcon.vue'
   import { useTabStore } from '@/stores'
 
-  import type { tabMapType } from '../../../../stores/index'
+  import type { tabMapType } from '../../../../../../stores/index'
 
   interface iconFormType {
     url: string
@@ -20,6 +20,7 @@
     iconActive: number
     id: number
   }
+
   const { pushChromeStorageTab, setChromeStorageTab } = useTabStore()
   const { tabMap } = storeToRefs(useTabStore())
   const formRef = ref<FormInstance>()
@@ -42,11 +43,6 @@
     iconForm.name = name
   }
 
-  // 选择首页显示哪个图标
-  const clickSeachIcon = (index: number) => {
-    iconForm.iconActive = index
-  }
-
   // 打开弹窗
   const openDialog = async (data?: tabMapType) => {
     dialogVisiable.value = true
@@ -65,7 +61,7 @@
     }
   }
 
-  // 保存图标
+  // 保存图标并继续添加
   const saveIcon = () => {
     const { name, url, iconList, iconActive, id } = iconForm
     const params = {
@@ -89,6 +85,7 @@
         type: 'success'
       })
     }
+    closeDialog()
   }
 
   // 保存并退出
@@ -150,7 +147,7 @@
             v-for="(item, index) in iconForm.iconList"
             :key="index"
             class="tabbox"
-            @click="clickSeachIcon(index)"
+            @click="() => (iconForm.iconActive = index)"
           >
             <div class="imgbox">
               <img

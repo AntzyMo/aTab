@@ -1,7 +1,13 @@
 <script setup lang="ts">
+  import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
+  import { useRightMemuStore } from '@/stores'
+
+  import IconDialog from './components/IconDialog/index.vue'
   import type { memuItem } from './type'
+
+  type iconDialogRefType = InstanceType<typeof IconDialog> | null
 
   interface PropsType {
     x: number
@@ -10,13 +16,11 @@
     data: memuItem[]
   }
 
-  interface EmitType {
-    (e: 'clickRightMemuItem', value: memuItem): void
-  }
-
   const { x = 0, y, open = false } = defineProps<PropsType>()
-  defineEmits<EmitType>()
 
+  const { tabHandleData } = storeToRefs(useRightMemuStore())
+
+  const iconDialogRef = ref<iconDialogRefType>(null)
   const rightMemuRef = ref<HTMLDivElement | null>(null)
 
   // 计算右键坐标防止右侧和底部溢出
@@ -39,6 +43,18 @@
       top: `${bottom}px`
     }
   })
+
+  // 点击右键菜单列表
+  const clickRightMemuItem = (item: memuItem) => {
+    const { type } = item
+    if (type === 'addIcon') {
+      iconDialogRef.value?.openDialog()
+    }
+
+    if (type === 'handleIcon') {
+      iconDialogRef.value?.openDialog(tabHandleData.value!)
+    }
+  }
 </script>
 
 <template>
@@ -53,12 +69,15 @@
       v-for="item in data"
       :key="item.name"
       class="item"
-      @click="$emit('clickRightMemuItem', item)"
+      @click="clickRightMemuItem(item)"
     >
       <span>{{ item.name }}</span>
       <component :is="item.icon" />
     </div>
   </div>
+
+  <!-- 图标弹窗 -->
+  <IconDialog ref="iconDialogRef" />
 </template>
 
 <style lang="scss" scoped>

@@ -14,18 +14,18 @@
 
   const { tabMap } = storeToRefs(useTabStore())
   const { getAllChromeStorageTab } = useTabStore()
-  const { rightMemuList, showRightMenu } = storeToRefs(useRightMemuStore())
+  const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
 
-  const getTab = async () => {
-    await getAllChromeStorageTab()
-  }
+  // const getTab = async () => {
+  //   await getAllChromeStorageTab()
+  // }
 
-  onMounted(() => {
-    getTab()
-  })
+  // onMounted(() => {
+  //   getTab()
+  // })
 
-  const rightClick = (e: MouseEvent, item: tabMapType) => {
+  const tabRightClick = (e: MouseEvent, item: tabMapType) => {
     const { x, y } = e
     openRightMenu(x, y)
     rightMemuList.value = [
@@ -35,7 +35,7 @@
         type: 'handleIcon'
       }
     ]
-    emit('rightClick', item)
+    tabHandleData.value = item
   }
 </script>
 
@@ -46,7 +46,7 @@
       :key="item.iconUrl"
       :href="item.url"
       class="tabBox"
-      @click.right.prevent.stop="e => rightClick(e, item)"
+      @click.right.prevent.stop="e => tabRightClick(e, item)"
       @click="showRightMenu = false"
     >
       <div class="imgBox">

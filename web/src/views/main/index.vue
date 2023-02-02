@@ -1,19 +1,14 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
-  import { ref } from 'vue'
 
-  import RightMemu from '@/components/RightMemu/index.vue'
   import { useRightMemuStore } from '@/stores'
 
-  import IconDialog from './components/IconDialog/index.vue'
+  import RightMemu from './components/RightMemu/index.vue'
   import SearchInput from './components/SearchInput/index.vue'
   import Tab from './components/Tab/index.vue'
   import useRightMemu from './hooks/useRightMemu'
 
-  export type iconDialogRefType = InstanceType<typeof IconDialog> | null
-  const iconDialogRef = ref<iconDialogRefType>(null)
-
-  const { tabRightClick, clickRightMemuItem, showRightMenu, rightClick, rightMemuList } = useRightMemu(iconDialogRef)
+  const { showRightMenu, rightClick, rightMemuList } = useRightMemu()
   const { mouseXY } = storeToRefs(useRightMemuStore())
 
   // 监听页面进入
@@ -36,7 +31,7 @@
     </header>
 
     <main>
-      <Tab @right-click="tabRightClick" />
+      <Tab />
     </main>
 
     <!-- 右键菜单 -->
@@ -45,11 +40,7 @@
       :x="mouseXY.x"
       :y="mouseXY.y"
       :data="rightMemuList"
-      @click-right-memu-item="clickRightMemuItem"
     />
-
-    <!-- 图标弹窗 -->
-    <IconDialog ref="iconDialogRef" />
   </div>
 </template>
 
