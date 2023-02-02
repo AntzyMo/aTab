@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     BlueCheckIcon: typeof import('./src/components/icon/BlueCheckIcon.vue')['default']
     CheckIcon: typeof import('./src/components/icon/CheckIcon.vue')['default']
     CloseIcon: typeof import('./src/components/icon/CloseIcon.vue')['default']
+    DelIcon: typeof import('./src/components/icon/DelIcon.vue')['default']
     Dialog: typeof import('./src/components/Dialog/index.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -19,7 +20,9 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
     HandleIcon: typeof import('./src/components/icon/HandleIcon.vue')['default']
-    RightMemu: typeof import('./src/components/RightMemu/index.vue')['default']
     SearchIcon: typeof import('./src/components/icon/SearchIcon.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

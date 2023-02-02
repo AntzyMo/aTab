@@ -15,14 +15,14 @@ export const useTabStore = defineStore('tabs', () => {
   const tabMap = ref<tabMapType[]>([])
 
   const getAllChromeStorageTab = async () => {
-    // const { tabs } = await chrome.storage.sync.get(['tabs'])
-    // console.log(tabs, 'tav')
-    // tabMap.value = tabs ? Object.values(tabs) : []
+    const { tabs } = await chrome.storage.sync.get(['tabs'])
+    console.log(tabs, 'tav')
+    tabMap.value = tabs ? Object.values(tabs) : []
   }
 
   const pushChromeStorageTab = async (data: tabMapType) => {
     tabMap.value.push(data)
-    // chrome.storage.sync.set({ tabs: tabMap.value })
+    chrome.storage.sync.set({ tabs: tabMap.value })
   }
 
   const getChromeStorageTab = (id: number) => {
@@ -35,6 +35,7 @@ export const useTabStore = defineStore('tabs', () => {
   const setChromeStorageTab = (id: number, data: tabMapType) => {
     const { index } = getChromeStorageTab(id)
     tabMap.value[index] = data
+    chrome.storage.sync.set({ tabs: tabMap.value })
   }
 
   const clearChromeStorageTab = () => {

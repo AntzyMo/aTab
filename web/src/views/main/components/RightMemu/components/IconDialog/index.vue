@@ -28,6 +28,8 @@
   const dialogVisiable = ref(false)
   const dialogTitle = ref('')
 
+  const loading = ref(false)
+
   const iconForm = reactive<iconFormType>({
     url: '',
     name: '',
@@ -38,7 +40,9 @@
 
   // 查询图标
   const getIcon = async () => {
+    loading.value = true
     const { iconArr, name } = await searchIconApi(iconForm.url)
+    loading.value = false
     iconForm.iconList = iconArr
     iconForm.name = name
   }
@@ -61,14 +65,14 @@
     }
   }
 
-  // 保存图标并继续添加
+  // 保存图标并继续
   const saveIcon = () => {
     const { name, url, iconList, iconActive, id } = iconForm
     const params = {
       name,
       url,
       iconUrl: iconList[iconActive],
-      id: tabMap.value.length + 1
+      id
     }
     console.log(params, 'params')
 
@@ -79,6 +83,7 @@
         type: 'success'
       })
     } else {
+      params.id = tabMap.value.length + 1
       pushChromeStorageTab(params)
       ElMessage({
         message: `添加【${name}】成功`,
@@ -142,7 +147,10 @@
         <el-input v-model.trim="iconForm.name" />
       </el-form-item>
       <el-form-item>
-        <div class="seachIconBox">
+        <div
+          v-loading="loading"
+          class="seachIconBox"
+        >
           <div
             v-for="(item, index) in iconForm.iconList"
             :key="index"
@@ -171,6 +179,7 @@
             >保存</el-button
           >
           <el-button
+            v-if="dialogTitle === '修改图标'"
             type="primary"
             @click="saveIcon"
             >保存并继续添加</el-button
@@ -195,9 +204,12 @@
     }
 
     .seachIconBox {
-      column-gap: 10px;
+      column-gap: 28px;
+      row-gap: 15px;
       display: flex;
       align-items: center;
+      width: 420px;
+      flex-wrap: wrap;
     }
 
     .tabbox {

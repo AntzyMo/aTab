@@ -7,23 +7,18 @@
 
   import type { tabMapType } from '../../../../stores/index'
 
-  interface emitType {
-    (e: 'rightClick', value: tabMapType): void
-  }
-  const emit = defineEmits<emitType>()
-
   const { tabMap } = storeToRefs(useTabStore())
   const { getAllChromeStorageTab } = useTabStore()
   const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
 
-  // const getTab = async () => {
-  //   await getAllChromeStorageTab()
-  // }
+  const getTab = async () => {
+    await getAllChromeStorageTab()
+  }
 
-  // onMounted(() => {
-  //   getTab()
-  // })
+  onMounted(() => {
+    getTab()
+  })
 
   const tabRightClick = (e: MouseEvent, item: tabMapType) => {
     const { x, y } = e
@@ -64,6 +59,7 @@
     flex-wrap: wrap;
     align-items: center;
     column-gap: 10px;
+    row-gap: 28px;
 
     .tabBox {
       width: 90px;
@@ -95,6 +91,11 @@
       .tab-text {
         color: #fff;
         font-size: 14px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
       }
     }
   }

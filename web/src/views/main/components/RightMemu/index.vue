@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
-  import { useRightMemuStore } from '@/stores'
+  import { useRightMemuStore, useTabStore } from '@/stores'
 
   import IconDialog from './components/IconDialog/index.vue'
   import type { memuItem } from './type'
@@ -19,7 +19,7 @@
   const { x = 0, y, open = false } = defineProps<PropsType>()
 
   const { tabHandleData } = storeToRefs(useRightMemuStore())
-
+  const { clearChromeStorageTab } = useTabStore()
   const iconDialogRef = ref<iconDialogRefType>(null)
   const rightMemuRef = ref<HTMLDivElement | null>(null)
 
@@ -53,6 +53,10 @@
 
     if (type === 'handleIcon') {
       iconDialogRef.value?.openDialog(tabHandleData.value!)
+    }
+
+    if (type === 'clearAllIcon') {
+      clearChromeStorageTab()
     }
   }
 </script>
