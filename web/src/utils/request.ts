@@ -2,8 +2,8 @@ import axios from 'axios'
 
 // 创建一个axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:3000',
-  timeout: 30000
+  baseURL: 'https://www.antzymo.icu',
+  timeout: 50000
 })
 
 // 设置请求拦截

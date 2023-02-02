@@ -58,7 +58,7 @@
       justify-content: center;
       margin-bottom: 20px;
       .searchInput-box {
-        margin-top: 60px;
+        margin-top: 174px;
         margin-bottom: 50px;
       }
     }

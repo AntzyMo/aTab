@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import { koaBody } from 'koa-body'
 import cors from 'koa-cors'
+
 import router from './router'
 
 const app = new Koa()
@@ -10,4 +11,6 @@ app.use(koaBody())
 
 app.use(router.routes())
 
-app.listen(3000)
+app.listen(3001, () => {
+  console.log('服务已启动')
+})
