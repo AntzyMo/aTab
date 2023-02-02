@@ -153,7 +153,10 @@
             @click="clickSeachIcon(index)"
           >
             <div class="imgbox">
-              <img :src="item" />
+              <img
+                :src="item"
+                :alt="item"
+              />
               <BlueCheckIcon
                 v-if="iconForm.iconActive === index"
                 class="bluecheckicon"
