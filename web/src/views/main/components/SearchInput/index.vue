@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  import ArrowDownIcon from '@/components/icon/ArrowDownIcon.vue'
   import CloseIcon from '@/components/icon/CloseIcon.vue'
   import SearchIcon from '@/components/icon/SearchIcon.vue'
 
@@ -10,7 +9,7 @@
 
   const serachValue = ref('')
   const searchInputRef = ref<HTMLInputElement | null>(null)
-  const { searchSelectValue, showSearchselect, keyCtrlDown, searchUrlMap, selectUrl, keyCtrlUp } = useSearchSelect()
+  const { searchSelectValue, showSearchselect, searchUrlMap, selectUrl } = useSearchSelect()
   const { keyWordList, searchKeyWord } = useSearchKeyWord()
 
   // 回车搜索
@@ -46,12 +45,8 @@
 <template>
   <div class="search-box">
     <div class="full">
-      <div
-        class="inputPrefix"
-        @click="showSearchselect = !showSearchselect"
-      >
+      <div class="inputPrefix">
         <img :src="searchUrlMap[searchSelectValue].iconUrl" />
-        <ArrowDownIcon />
       </div>
       <div class="input-box">
         <input
@@ -59,8 +54,6 @@
           v-model.trim="serachValue"
           placeholder="请输入您要搜索的内容"
           @keyup.enter="confrim"
-          @keyup.ctrl.down="keyCtrlDown"
-          @keyup.ctrl.up="keyCtrlUp"
           @input="searchKeyWord(serachValue)"
           @compositionupdate="fun"
         />
@@ -131,10 +124,9 @@
       height: 100%;
 
       .inputPrefix {
-        margin-right: 4px;
         display: flex;
         align-items: center;
-        width: 50px;
+        width: 36px;
         height: 100%;
         justify-content: center;
         padding-left: 8px;
