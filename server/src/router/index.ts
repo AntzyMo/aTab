@@ -1,7 +1,6 @@
 import Router from '@koa/router'
 
 import { getInfinityIconApi, getUrlIcon } from '../model/getIcon'
-import type { searchKeywordListType } from '../model/searchKeyword'
 import { getBaiduSearchKeyWord } from '../model/searchKeyword'
 import { successRes } from '../utils/bodyRes'
 const router = new Router()

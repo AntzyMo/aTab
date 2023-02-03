@@ -10,12 +10,12 @@
   const serachValue = ref('')
   const searchInputRef = ref<HTMLInputElement | null>(null)
   const { searchSelectValue, showSearchselect, searchUrlMap, selectUrl } = useSearchSelect()
-  const { keyWordList, searchKeyWord } = useSearchKeyWord()
+  const { keyWordList, searchKeyWord, searchKeyWordDown, keyWordListActive } = useSearchKeyWord(serachValue)
 
   // 回车搜索
-  const confrim = () => {
+  const confrim = (val?: string) => {
     const url = searchUrlMap.value[searchSelectValue.value].url
-    window.open(url + serachValue.value)
+    window.open(url + val)
     clearSearchValue()
   }
 
@@ -24,21 +24,7 @@
     serachValue.value = ''
     searchInputRef.value?.focus()
     keyWordList.value = []
-  }
-
-  const fun = (e: CompositionEvent) => {
-    const { data } = e
-    // 获取光标位置
-    const selectionStartIdx = searchInputRef.value?.selectionStart || 0
-
-    if (selectionStartIdx > 0 && selectionStartIdx < serachValue.value.length - 1) {
-      const valStart = serachValue.value.slice(0, selectionStartIdx)
-      const valEnd = serachValue.value.slice(selectionStartIdx)
-      serachValue.value = valStart + data + valEnd
-      return
-    }
-
-    serachValue.value = data
+    keyWordListActive.value = -1
   }
 </script>
 
@@ -53,9 +39,9 @@
           ref="searchInputRef"
           v-model.trim="serachValue"
           placeholder="请输入您要搜索的内容"
-          @keyup.enter="confrim"
+          @keyup.enter="confrim(serachValue)"
           @input="searchKeyWord(serachValue)"
-          @compositionupdate="fun"
+          @keydown.down="searchKeyWordDown"
         />
         <CloseIcon
           v-show="serachValue.length"
@@ -65,7 +51,7 @@
       </div>
       <div
         class="searchIcon"
-        @click="confrim"
+        @click="confrim()"
       >
         <SearchIcon />
       </div>
@@ -92,9 +78,11 @@
 
     <div class="searchKeyword-box">
       <div
-        v-for="item in keyWordList"
-        :key="item.value"
+        v-for="(item, index) in keyWordList"
+        :key="index"
         class="item"
+        :class="{ itemActive: keyWordListActive === index }"
+        @click="confrim(item.value)"
       >
         <div class="full">
           <SearchIcon class="keywordSearchIcon" />
@@ -279,6 +267,10 @@
             margin-right: 6px;
           }
         }
+      }
+
+      .itemActive {
+        background: rgba(255, 255, 255, 0.4);
       }
     }
   }
