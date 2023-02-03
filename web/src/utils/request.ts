@@ -1,8 +1,13 @@
 import axios from 'axios'
 
+const ipConfig = {
+  dev: 'http://localhost:3001',
+  build: 'https://www.antzymo.icu'
+}
+
 // 创建一个axios实例
 const service = axios.create({
-  baseURL: 'https://www.antzymo.icu',
+  baseURL: ipConfig.dev,
   timeout: 50000
 })
 

@@ -24,5 +24,14 @@ export default defineConfig(({ command }) => ({
   },
   build: {
     outDir: '../chrome/dist'
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://www.baidu.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
   }
 }))

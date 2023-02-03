@@ -5,24 +5,42 @@
   import CloseIcon from '@/components/icon/CloseIcon.vue'
   import SearchIcon from '@/components/icon/SearchIcon.vue'
 
-  import { pageVisibilitychange } from '../../../../utils/index'
+  import useSearchKeyWord from './hooks/useSearchKeyWord'
   import useSearchSelect from './hooks/useSearchSelect'
 
   const serachValue = ref('')
-  const searchInput = ref<HTMLInputElement | null>(null)
+  const searchInputRef = ref<HTMLInputElement | null>(null)
   const { searchSelectValue, showSearchselect, keyCtrlDown, searchUrlMap, selectUrl, keyCtrlUp } = useSearchSelect()
+  const { keyWordList, searchKeyWord } = useSearchKeyWord()
 
   // 回车搜索
   const confrim = () => {
     const url = searchUrlMap.value[searchSelectValue.value].url
     window.open(url + serachValue.value)
+    clearSearchValue()
   }
 
-  // 监听页面进入
-  pageVisibilitychange(() => {
+  // 清空输入框
+  const clearSearchValue = () => {
     serachValue.value = ''
-    searchInput.value?.focus()
-  })
+    searchInputRef.value?.focus()
+    keyWordList.value = []
+  }
+
+  const fun = (e: CompositionEvent) => {
+    const { data } = e
+    // 获取光标位置
+    const selectionStartIdx = searchInputRef.value?.selectionStart || 0
+
+    if (selectionStartIdx > 0 && selectionStartIdx < serachValue.value.length - 1) {
+      const valStart = serachValue.value.slice(0, selectionStartIdx)
+      const valEnd = serachValue.value.slice(selectionStartIdx)
+      serachValue.value = valStart + data + valEnd
+      return
+    }
+
+    serachValue.value = data
+  }
 </script>
 
 <template>
@@ -37,17 +55,19 @@
       </div>
       <div class="input-box">
         <input
-          ref="searchInput"
+          ref="searchInputRef"
           v-model.trim="serachValue"
           placeholder="请输入您要搜索的内容"
           @keyup.enter="confrim"
           @keyup.ctrl.down="keyCtrlDown"
           @keyup.ctrl.up="keyCtrlUp"
+          @input="searchKeyWord(serachValue)"
+          @compositionupdate="fun"
         />
         <CloseIcon
           v-show="serachValue.length"
           class="closeIcon"
-          @click="serachValue = ''"
+          @click="clearSearchValue"
         />
       </div>
       <div
@@ -58,6 +78,7 @@
       </div>
     </div>
 
+    <!-- 搜索引擎下拉框 -->
     <div
       class="select-box"
       :class="{ 'search-box-active': showSearchselect }"
@@ -73,6 +94,19 @@
           <img :src="item.iconUrl" />
         </div>
         <span class="url-text">{{ item.name }}</span>
+      </div>
+    </div>
+
+    <div class="searchKeyword-box">
+      <div
+        v-for="item in keyWordList"
+        :key="item.value"
+        class="item"
+      >
+        <div class="full">
+          <SearchIcon class="keywordSearchIcon" />
+          <span>{{ item.value }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -214,6 +248,45 @@
     }
     .search-box-active {
       transform: scaleY(1);
+    }
+
+    .searchKeyword-box {
+      position: absolute;
+      top: 54px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      box-shadow: 0 0 10px 3px #0000001a;
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 23px;
+      overflow: hidden;
+      .item {
+        font-size: 14px;
+        color: #222;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        flex: 1;
+        padding: 10px 20px;
+        transition: all 0.4s;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.4);
+        }
+
+        &:hover .full {
+          transform: translate3d(5px, 0, 0);
+        }
+
+        .full {
+          transition: all 0.4s;
+          .keywordSearchIcon {
+            transform: scale(0.8);
+            margin-right: 6px;
+          }
+        }
+      }
     }
   }
 </style>
