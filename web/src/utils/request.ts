@@ -7,7 +7,7 @@ const ipConfig = {
 
 // 创建一个axios实例
 const service = axios.create({
-  baseURL: ipConfig.dev,
+  baseURL: import.meta.env.DEV ? ipConfig.dev : ipConfig.build,
   timeout: 50000
 })
 
