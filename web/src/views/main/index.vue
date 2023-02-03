@@ -46,7 +46,7 @@
   .container {
     position: relative;
     height: 100vh;
-    background: url('https://files.codelife.cc/itab/defaultWallpaper/defaultWallpaper.webp');
+    background: url('../../assets/bg.webp');
     display: flex;
     flex-direction: column;
 
