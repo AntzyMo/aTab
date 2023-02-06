@@ -8,6 +8,7 @@ export interface tabMapType {
   iconUrl: string
   url: string
   id: number
+  bgColor: string
 }
 
 // 标签 store

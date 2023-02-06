@@ -9,9 +9,9 @@
   import { searchIconApi } from '@/api'
   import Dialog from '@/components/Dialog/index.vue'
   import BlueCheckIcon from '@/components/icon/BlueCheckIcon.vue'
+  import CheckIcon from '@/components/icon/CheckIcon.vue'
+  import type { tabMapType } from '@/stores'
   import { useTabStore } from '@/stores'
-
-  import type { tabMapType } from '../../../../../../stores/index'
 
   interface iconFormType {
     url: string
@@ -19,6 +19,8 @@
     iconList: string[]
     iconActive: number
     id: number
+    colorPicker: string
+    colorItemActive: number
   }
 
   const { pushChromeStorageTab, setChromeStorageTab } = useTabStore()
@@ -35,8 +37,25 @@
     name: '',
     iconList: [],
     iconActive: 0,
-    id: 0
+    id: 0,
+    colorPicker: 'rgb(22, 129, 255)',
+    colorItemActive: 0
   })
+
+  const colorList = [
+    'rgb(22, 129, 255)',
+    'rgb(251, 190, 35)',
+    'rgb(252, 69, 72)',
+    'rgb(75, 60, 54)',
+    'rgb(125, 172, 104)',
+    'rgb(2, 51, 115)',
+    'rgb(200, 172, 112)',
+    'rgb(55, 33, 40)',
+    'rgb(200, 44, 52)',
+    'rgb(5, 64, 146)',
+    'rgb(163, 221, 185)'
+  ]
+  let oldColor = '' // 缓存打开 colorPicker 前的值
 
   // 查询图标
   const getIcon = async () => {
@@ -44,7 +63,7 @@
     const { iconArr, name } = await searchIconApi(iconForm.url)
     loading.value = false
     iconForm.iconList = iconArr
-    iconForm.name = name
+    if (name) iconForm.name = name
   }
 
   // 打开弹窗
@@ -53,11 +72,13 @@
 
     if (data) {
       dialogTitle.value = '修改图标'
-      const { name, url, iconUrl, id } = data
+      const { name, url, iconUrl, id, bgColor } = data
       iconForm.url = url
       iconForm.id = id
-      await getIcon()
+      if (iconUrl) await getIcon()
       iconForm.name = name
+      iconForm.colorPicker = bgColor
+      iconForm.colorItemActive = colorList.indexOf(bgColor)
       iconForm.iconActive = iconForm.iconList.findIndex(item => item === iconUrl)
     } else {
       dialogTitle.value = '添加图标'
@@ -67,12 +88,13 @@
 
   // 保存图标并继续
   const saveIcon = () => {
-    const { name, url, iconList, iconActive, id } = iconForm
+    const { name, url, iconList, iconActive, id, colorPicker } = iconForm
     const params = {
       name,
       url,
       iconUrl: iconList[iconActive],
-      id
+      id,
+      bgColor: colorPicker
     }
     console.log(params, 'params')
 
@@ -103,6 +125,24 @@
   const closeDialog = () => {
     formRef.value?.resetFields()
     iconForm.iconList = []
+  }
+
+  // 选择颜色
+  const selectTabColor = (idx: number) => {
+    iconForm.colorPicker = colorList[idx]
+    iconForm.colorItemActive = idx
+  }
+
+  // 改变颜色
+  const colorChange = (color: string) => {
+    iconForm.colorItemActive = -1
+    if (!oldColor) oldColor = iconForm.colorPicker
+    if (!color) {
+      iconForm.colorItemActive = 0
+      iconForm.colorPicker = 'rgb(22, 129, 255)'
+      return
+    }
+    iconForm.colorPicker = color
   }
 
   defineExpose({
@@ -146,11 +186,53 @@
       >
         <el-input v-model.trim="iconForm.name" />
       </el-form-item>
+      <el-form-item
+        v-if="iconForm.name && !iconForm.iconList.length"
+        label="图标颜色"
+        prop="colorItemActive"
+      >
+        <div class="colorList">
+          <div
+            v-for="(item, index) in colorList"
+            :key="item"
+            class="colorItem cursor"
+            :style="{
+              background: item
+            }"
+            @click="selectTabColor(index)"
+          >
+            <CheckIcon
+              v-show="index === iconForm.colorItemActive"
+              class="checkIcon"
+            />
+          </div>
+          <el-color-picker
+            v-model="iconForm.colorPicker"
+            show-alpha
+            @active-change="colorChange"
+          />
+        </div>
+      </el-form-item>
       <el-form-item>
         <div
           v-loading="loading"
           class="seachIconBox"
         >
+          <!-- 文字图标 -->
+          <div
+            v-if="iconForm.name && !iconForm.iconList.length"
+            class="tabbox"
+          >
+            <div
+              class="imgbox"
+              :style="{ background: iconForm.colorPicker }"
+            >
+              <div class="text">{{ iconForm.name.slice(0, 2) }}</div>
+            </div>
+            <span>文字图标</span>
+          </div>
+
+          <!-- icon图标 -->
           <div
             v-for="(item, index) in iconForm.iconList"
             :key="index"
@@ -179,7 +261,7 @@
             >保存</el-button
           >
           <el-button
-            v-if="dialogTitle === '修改图标'"
+            v-if="dialogTitle != '修改图标'"
             type="primary"
             @click="saveIcon"
             >保存并继续添加</el-button
@@ -243,6 +325,51 @@
           bottom: 4px;
           right: 2px;
           z-index: 1;
+        }
+        .text {
+          color: #fff;
+          font-size: 15px;
+        }
+      }
+    }
+
+    .colorList {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 420px;
+      .colorItem {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .checkIcon {
+        color: #fff;
+        width: 14px;
+        height: 14px;
+      }
+
+      &:deep(.el-color-picker__trigger) {
+        border: none;
+        border-radius: 50%;
+        padding: 0;
+        overflow: hidden;
+        width: 18px;
+        height: 18px;
+        .el-color-picker__color {
+          border: none;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          padding: 0;
+        }
+        .el-color-picker__color-inner {
+          background: url('@/assets/color.jpg');
+          background-size: cover;
         }
       }
     }

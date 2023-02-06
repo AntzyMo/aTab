@@ -44,8 +44,21 @@
       @click.right.prevent.stop="e => tabRightClick(e, item)"
       @click="showRightMenu = false"
     >
-      <div class="imgBox">
-        <img :src="item.iconUrl" />
+      <div
+        class="imgBox"
+        :style="{ background: !item.iconUrl ? item.bgColor : '' }"
+      >
+        <img
+          v-if="item.iconUrl"
+          :src="item.iconUrl"
+        />
+
+        <div
+          v-else
+          class="text"
+        >
+          {{ item.name.slice(0, 2) }}
+        </div>
       </div>
       <span class="tab-text">{{ item.name }}</span>
     </a>
@@ -85,6 +98,11 @@
         img {
           width: 100%;
           object-fit: scale-down;
+        }
+
+        .text {
+          color: #fff;
+          font-size: 15px;
         }
       }
 
