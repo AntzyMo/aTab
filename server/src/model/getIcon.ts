@@ -16,6 +16,8 @@ export const getInfinityIconApi = async (url: string) => {
     }
   })
   const iconArr = iconRes.data.data.map((item: { src: any }) => item.src)
+  if (!iconArr.length) return { iconArr: [], name: '' }
+
   return { name: res.data.data.title, iconArr }
 }
 
