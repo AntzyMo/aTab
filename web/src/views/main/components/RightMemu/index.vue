@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  import 'element-plus/theme-chalk/el-message.css'
+  import 'element-plus/theme-chalk/el-message-box.css'
+
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
@@ -45,7 +49,7 @@
   })
 
   // 点击右键菜单列表
-  const clickRightMemuItem = (item: memuItem) => {
+  const clickRightMemuItem = async (item: memuItem) => {
     const { type } = item
     if (type === 'addIcon') {
       iconDialogRef.value?.openDialog()
@@ -56,7 +60,16 @@
     }
 
     if (type === 'clearAllIcon') {
+      await ElMessageBox.confirm('您确定清空所有图标吗?', '警告', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'error'
+      })
       clearChromeStorageTab()
+      ElMessage({
+        message: `删除成功`,
+        type: 'success'
+      })
     }
   }
 </script>
