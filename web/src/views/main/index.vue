@@ -9,7 +9,7 @@
   import Tab from './components/Tab/index.vue'
   import useRightMemu from './hooks/useRightMemu'
 
-  const { showRightMenu, rightClick, rightMemuList } = useRightMemu()
+  const { showRightMenu, rightClick, rightMemuList, mainClick } = useRightMemu()
   const { mouseXY } = storeToRefs(useRightMemuStore())
 
   // 监听页面进入
@@ -22,19 +22,19 @@
   <div
     class="container"
     @click.right.prevent="rightClick"
-    @click="showRightMenu = false"
+    @click="mainClick"
   >
     <header>
       <SearchInput class="searchInput-box" />
     </header>
 
     <main>
-      <Tab />
+      <Tab ref="tabRef" />
     </main>
 
     <!-- 右键菜单 -->
     <RightMemu
-      :open="showRightMenu"
+      v-model="showRightMenu"
       :x="mouseXY.x"
       :y="mouseXY.y"
       :data="rightMemuList"

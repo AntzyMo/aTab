@@ -9,6 +9,17 @@ export interface tabMapType {
   url: string
   id: number
   bgColor: string
+  isDel: boolean
+}
+
+// 给Tab 数据打补丁 避免有些字段没有
+const fixTabData = (tabs: any): tabMapType[] => {
+  if (!tabs) return []
+  const arr: tabMapType[] = Object.values(tabs)
+  arr.forEach(item => {
+    item.isDel = false
+  })
+  return arr
 }
 
 // 标签 store
@@ -18,7 +29,7 @@ export const useTabStore = defineStore('tabs', () => {
   const getAllChromeStorageTab = async () => {
     const { tabs } = await chrome.storage.sync.get(['tabs'])
     console.log(tabs, 'tav')
-    tabMap.value = tabs ? Object.values(tabs) : []
+    tabMap.value = fixTabData(tabs)
   }
 
   const pushChromeStorageTab = async (data: tabMapType) => {
@@ -43,13 +54,29 @@ export const useTabStore = defineStore('tabs', () => {
     chrome.storage.sync.clear()
   }
 
+  const delChromeStoreTab = (idx: number) => {
+    tabMap.value.splice(idx, 1)
+    // chrome.storage.sync.set({ tabs: tabMap.value })
+  }
+
+  const showTabDel = () => {
+    tabMap.value.forEach(item => (item.isDel = true))
+  }
+
+  const closeTabDel = () => {
+    tabMap.value.forEach(item => (item.isDel = false))
+  }
+
   return {
     clearChromeStorageTab,
     tabMap,
     getAllChromeStorageTab,
     pushChromeStorageTab,
     setChromeStorageTab,
-    getChromeStorageTab
+    getChromeStorageTab,
+    delChromeStoreTab,
+    showTabDel,
+    closeTabDel
   }
 })
 

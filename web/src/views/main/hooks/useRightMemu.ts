@@ -1,12 +1,15 @@
 import { storeToRefs } from 'pinia'
 
 import AddIcon from '@/components/icon/AddIcon.vue'
-import DelIcon from '@/components/icon/DelIcon.vue'
+import AllDelIcon from '@/components/icon/AllDelIcon.vue'
 import { useRightMemuStore } from '@/stores'
+
+import { useTabStore } from '../../../stores/index'
 
 export default () => {
   const { rightMemuList, showRightMenu } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
+  const { closeTabDel } = useTabStore()
 
   // 页面右键点击
   const rightClick = (e: MouseEvent) => {
@@ -19,16 +22,23 @@ export default () => {
         type: 'addIcon'
       },
       {
-        name: '清空图标',
-        icon: DelIcon,
-        type: 'clearAllIcon'
+        name: '批量删除',
+        icon: AllDelIcon,
+        type: 'delAllTab'
       }
     ]
+  }
+
+  const mainClick = () => {
+    showRightMenu.value = false
+    console.log(22)
+    closeTabDel()
   }
 
   return {
     showRightMenu,
     rightClick,
-    rightMemuList
+    rightMemuList,
+    mainClick
   }
 }

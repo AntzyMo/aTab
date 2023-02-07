@@ -2,7 +2,6 @@
   import 'element-plus/theme-chalk/el-message.css'
   import 'element-plus/theme-chalk/el-message-box.css'
 
-  import { ElMessage, ElMessageBox } from 'element-plus'
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
@@ -16,14 +15,17 @@
   interface PropsType {
     x: number
     y: number
-    open: boolean
+    modelValue: boolean
     data: memuItem[]
   }
 
-  const { x = 0, y, open = false } = defineProps<PropsType>()
+  const { x = 0, y } = defineProps<PropsType>()
+  const emit = defineEmits(['update:modelValue'])
 
   const { tabHandleData } = storeToRefs(useRightMemuStore())
-  const { clearChromeStorageTab } = useTabStore()
+  const { tabMap } = storeToRefs(useTabStore())
+
+  const { delChromeStoreTab, showTabDel } = useTabStore()
   const iconDialogRef = ref<iconDialogRefType>(null)
   const rightMemuRef = ref<HTMLDivElement | null>(null)
 
@@ -59,42 +61,44 @@
       iconDialogRef.value?.openDialog(tabHandleData.value!)
     }
 
-    if (type === 'clearAllIcon') {
-      await ElMessageBox.confirm('您确定清空所有图标吗?', '警告', {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
-        type: 'error'
-      })
-      clearChromeStorageTab()
-      ElMessage({
-        message: `删除成功`,
-        type: 'success'
-      })
+    // 批量删除
+    if (type === 'delAllTab') {
+      console.log(111)
+
+      showTabDel()
     }
+
+    if (type === 'delTab') {
+      const idx = tabMap.value.findIndex(item => item.id === tabHandleData.value?.id)
+      delChromeStoreTab(idx)
+    }
+    emit('update:modelValue', false)
   }
 </script>
 
 <template>
-  <div
-    v-show="open"
-    id="name"
-    ref="rightMemuRef"
-    class="memu-box"
-    :style="leftTopStyle"
-  >
+  <Teleport to="body">
     <div
-      v-for="item in data"
-      :key="item.name"
-      class="item"
-      @click="clickRightMemuItem(item)"
+      v-show="modelValue"
+      id="name"
+      ref="rightMemuRef"
+      class="memu-box"
+      :style="leftTopStyle"
     >
-      <span>{{ item.name }}</span>
-      <component :is="item.icon" />
+      <div
+        v-for="item in data"
+        :key="item.name"
+        class="item"
+        @click="clickRightMemuItem(item)"
+      >
+        <span>{{ item.name }}</span>
+        <component :is="item.icon" />
+      </div>
     </div>
-  </div>
 
-  <!-- 图标弹窗 -->
-  <IconDialog ref="iconDialogRef" />
+    <!-- 图标弹窗 -->
+    <IconDialog ref="iconDialogRef" />
+  </Teleport>
 </template>
 
 <style lang="scss" scoped>

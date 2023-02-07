@@ -94,9 +94,9 @@
       url,
       iconUrl: iconList[iconActive],
       id,
-      bgColor: colorPicker
+      bgColor: colorPicker,
+      isDel: false
     }
-    console.log(params, 'params')
 
     if (dialogTitle.value === '修改图标') {
       setChromeStorageTab(id, params)
