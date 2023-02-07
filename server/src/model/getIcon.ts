@@ -15,12 +15,12 @@ export const getInfinityIconApi = async (url: string) => {
       limit: 100
     }
   })
-  const iconArr = iconRes.data.data.map((item: { src: any }) => item.src)
-  console.log(iconRes.data.data, ' iconRes.data.data')
   const resData = {
     name: res.data.data.title,
     iconArr: [] as string[]
   }
+  console.log(iconRes.data.data, ' iconRes.data.data')
+  const iconArr = iconRes.data.data.map((item: { src: any }) => item.src)
   if (iconArr.length) resData.iconArr = iconArr
 
   return resData
@@ -28,7 +28,8 @@ export const getInfinityIconApi = async (url: string) => {
 
 // 爬取网站icon
 export const getUrlIcon = async (url: string) => {
-  if (url.at(-1) === '/') url = url.slice(0, -1)
+  if (url.endsWith('/')) url = url.slice(0, -1)
+  console.log(222)
 
   const iconMap: string[] = []
 

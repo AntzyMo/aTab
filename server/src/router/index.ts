@@ -11,6 +11,8 @@ router.get('/getIcon', async ctx => {
   const data = await getInfinityIconApi(url)
 
   if (!data.iconArr.length) {
+    console.log(111)
+
     data.iconArr = await getUrlIcon(url)
   }
   ctx.body = successRes(data)
