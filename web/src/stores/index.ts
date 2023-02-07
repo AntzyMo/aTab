@@ -56,7 +56,11 @@ export const useTabStore = defineStore('tabs', () => {
 
   const delChromeStoreTab = (idx: number) => {
     tabMap.value.splice(idx, 1)
-    // chrome.storage.sync.set({ tabs: tabMap.value })
+    chrome.storage.sync.set({ tabs: tabMap.value })
+  }
+
+  const setAllChromeStoreTab = (tabs = tabMap.value) => {
+    chrome.storage.sync.set({ tabs })
   }
 
   const showTabDel = () => {
@@ -76,7 +80,8 @@ export const useTabStore = defineStore('tabs', () => {
     getChromeStorageTab,
     delChromeStoreTab,
     showTabDel,
-    closeTabDel
+    closeTabDel,
+    setAllChromeStoreTab
   }
 })
 

@@ -14,7 +14,8 @@
     "element-plus": "^2.2.28",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.28",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@antzy/eslint-config": "^1.4.9",

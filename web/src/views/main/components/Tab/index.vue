@@ -1,16 +1,15 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
   import { onMounted } from 'vue'
+  import Draggable from 'vuedraggable'
 
   import CloseIcon from '@/components/icon/CloseIcon.vue'
   import DelIcon from '@/components/icon/DelIcon.vue'
   import HandleIcon from '@/components/icon/HandleIcon.vue'
   import { useRightMemuStore, useTabStore } from '@/stores'
-
-  import type { tabMapType } from '../../../../stores/index'
-
+  import type { tabMapType } from '@/stores/index'
   const { tabMap } = storeToRefs(useTabStore())
-  const { getAllChromeStorageTab, delChromeStoreTab } = useTabStore()
+  const { getAllChromeStorageTab, delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
   const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
 
@@ -43,48 +42,53 @@
 </script>
 
 <template>
-  <div class="Tab-box">
-    <a
-      v-for="(item, index) in tabMap"
-      :key="item.id"
-      :href="item.url"
-      class="tabBox"
-      @click.right.prevent.stop="e => tabRightClick(e, item)"
-      @click="showRightMenu = false"
-    >
-      <div
-        class="imgBox"
-        :class="{ delTabAim: item.isDel }"
-        :style="{
-          background: !item.iconUrl ? item.bgColor : ''
-        }"
+  <Draggable
+    v-model="tabMap"
+    item-key="id"
+    class="Tab-box"
+    @end="setAllChromeStoreTab()"
+  >
+    <template #item="{ element: item, index }">
+      <a
+        :href="item.url"
+        class="tabBox"
+        @click.right.prevent.stop="e => tabRightClick(e, item)"
+        @click="showRightMenu = false"
       >
-        <img
-          v-if="item.iconUrl"
-          :src="item.iconUrl"
-        />
-
         <div
-          v-else
-          class="text"
+          class="imgBox"
+          :class="{ delTabAim: item.isDel }"
+          :style="{
+            background: !item.iconUrl ? item.bgColor : ''
+          }"
         >
-          {{ item.name.slice(0, 2) }}
-        </div>
-        <div
-          v-show="item.isDel"
-          class="delIcon"
-          @click.prevent.stop="delChromeStoreTab(index)"
-        >
-          <CloseIcon
-            color="#fff"
-            :width="12"
+          <img
+            v-if="item.iconUrl"
+            :src="item.iconUrl"
           />
-        </div>
-      </div>
 
-      <span class="tab-text">{{ item.name }}</span>
-    </a>
-  </div>
+          <div
+            v-else
+            class="text"
+          >
+            {{ item.name.slice(0, 2) }}
+          </div>
+          <div
+            v-show="item.isDel"
+            class="delIcon"
+            @click.prevent.stop="delChromeStoreTab(index)"
+          >
+            <CloseIcon
+              color="#fff"
+              :width="12"
+            />
+          </div>
+        </div>
+
+        <span class="tab-text">{{ item.name }}</span>
+      </a>
+    </template>
+  </Draggable>
 </template>
 
 <style lang="scss" scoped>
@@ -138,6 +142,7 @@
         img {
           width: 100%;
           object-fit: scale-down;
+          border-radius: 16px;
         }
 
         .text {

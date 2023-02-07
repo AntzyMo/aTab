@@ -20,6 +20,7 @@ specifiers:
   vite: ^4.0.0
   vue: ^3.2.45
   vue-tsc: ^1.0.12
+  vuedraggable: ^4.1.0
 
 dependencies:
   axios: 1.2.6
@@ -27,6 +28,7 @@ dependencies:
   normalize.css: 8.0.1
   pinia: 2.0.29_e7lp6ggkpgyi5vqd44m2kxvk6i
   vue: 3.2.45
+  vuedraggable: 4.1.0_vue@3.2.45
 
 devDependencies:
   '@antzy/eslint-config': 1.4.10_eslint@8.33.0
@@ -2653,6 +2655,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /sortablejs/1.14.0:
+    resolution: {integrity: sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==}
+    dev: false
+
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -3032,6 +3038,15 @@ packages:
       '@vue/runtime-dom': 3.2.45
       '@vue/server-renderer': 3.2.45_vue@3.2.45
       '@vue/shared': 3.2.45
+
+  /vuedraggable/4.1.0_vue@3.2.45:
+    resolution: {integrity: sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==}
+    peerDependencies:
+      vue: ^3.0.1
+    dependencies:
+      sortablejs: 1.14.0
+      vue: 3.2.45
+    dev: false
 
   /webpack-sources/3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
