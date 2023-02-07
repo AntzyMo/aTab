@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const ipConfig = {
   dev: 'http://localhost:3001',
-  build: 'https://www.antzymo.icu'
+  build: 'https://api.antzymo.icu'
 }
 
 // 创建一个axios实例
