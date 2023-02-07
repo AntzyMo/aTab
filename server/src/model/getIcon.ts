@@ -16,9 +16,14 @@ export const getInfinityIconApi = async (url: string) => {
     }
   })
   const iconArr = iconRes.data.data.map((item: { src: any }) => item.src)
-  if (!iconArr.length) return { iconArr: [], name: '' }
+  console.log(iconRes.data.data, ' iconRes.data.data')
+  const resData = {
+    name: res.data.data.title,
+    iconArr: [] as string[]
+  }
+  if (iconArr.length) resData.iconArr = iconArr
 
-  return { name: res.data.data.title, iconArr }
+  return resData
 }
 
 // 爬取网站icon
