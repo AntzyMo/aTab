@@ -111,7 +111,7 @@
     animation: 0.3s ease 0.3s infinite normal none running delTab;
   }
   .Tab-box {
-    max-width: 1350px;
+    width: 1000px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
