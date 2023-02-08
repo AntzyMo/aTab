@@ -15,15 +15,13 @@ export const getBaiduSearchKeyWord = async (wd: string) => {
 
   let list: searchKeywordListType[] = []
 
-  const { q, g } = res.data
+  const { g } = res.data
 
   if (g) {
     list = g.map((item: { q: any }) => ({
       type: 'search',
       value: item.q
     }))
-  } else {
-    list.push({ type: 'search', value: q })
   }
   return list
 }
