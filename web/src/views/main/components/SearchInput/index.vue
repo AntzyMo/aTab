@@ -10,7 +10,8 @@
   const serachValue = ref('')
   const searchInputRef = ref<HTMLInputElement | null>(null)
   const { searchSelectValue, showSearchselect, searchUrlMap, selectUrl } = useSearchSelect()
-  const { keyWordList, searchKeyWord, searchKeyWordDown, keyWordListActive } = useSearchKeyWord(serachValue)
+  const { keyWordList, searchKeyWord, searchKeyWordDown, searchKeyWordUp, keyWordListActive } =
+    useSearchKeyWord(serachValue)
 
   // 回车搜索
   const confrim = (val?: string) => {
@@ -42,6 +43,7 @@
           @keyup.enter="confrim(serachValue)"
           @input="searchKeyWord(serachValue)"
           @keydown.down="searchKeyWordDown"
+          @keydown.up="searchKeyWordUp"
         />
         <CloseIcon
           v-show="serachValue.length"

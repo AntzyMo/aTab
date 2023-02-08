@@ -24,14 +24,22 @@ export default (serachValue: Ref<string>) => {
   const searchKeyWordDown = () => {
     if (!keyWordList.value.length) return
     keyWordListActive.value++
+    if (keyWordListActive.value > keyWordList.value.length - 1) keyWordListActive.value = 0
     serachValue.value = keyWordList.value[keyWordListActive.value].value
-    if (keyWordListActive.value === keyWordList.value.length) keyWordListActive.value = 0
+  }
+
+  const searchKeyWordUp = () => {
+    if (!keyWordList.value.length) return
+    keyWordListActive.value--
+    if (keyWordListActive.value < 0) keyWordListActive.value = keyWordList.value.length - 1
+    serachValue.value = keyWordList.value[keyWordListActive.value].value
   }
 
   return {
     keyWordList,
     searchKeyWord,
     searchKeyWordDown,
-    keyWordListActive
+    keyWordListActive,
+    searchKeyWordUp
   }
 }
