@@ -51,7 +51,7 @@
           @keyup.enter="confrim(serachValue)"
           @input="searchKeyWord(serachValue)"
           @keydown.down="searchKeyWordDown"
-          @keydown.up="searchKeyWordUp"
+          @keydown.up.prevent="searchKeyWordUp"
           @compositionstart="inputPinyinStart(searchInputRef!)"
           @compositionupdate="e => inputPinyinSearch(e, serachValue)"
           @compositionend="inputPinyinEnd"
@@ -95,11 +95,11 @@
         :key="index"
         class="item"
         :class="{ itemActive: keyWordListActive === index }"
-        @click="confrim(item.value)"
+        @click="confrim(item)"
       >
         <div class="full">
           <SearchIcon class="keywordSearchIcon" />
-          <span>{{ item.value }}</span>
+          <span>{{ item }}</span>
         </div>
       </div>
     </div>
@@ -255,6 +255,7 @@
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 23px;
       overflow: hidden;
+
       .item {
         font-size: 14px;
         color: #222;
@@ -264,13 +265,12 @@
         flex: 1;
         padding: 10px 20px;
         transition: all 0.4s;
-
         &:hover {
           background: rgba(255, 255, 255, 0.4);
         }
 
         &:hover .full {
-          transform: translate3d(5px, 0, 0);
+          transform: translate3d(6px, 0, 0);
         }
 
         .full {
@@ -284,6 +284,9 @@
 
       .itemActive {
         background: rgba(255, 255, 255, 0.4);
+        .full {
+          transform: translate3d(6px, 0, 0);
+        }
       }
     }
   }

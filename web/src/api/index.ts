@@ -16,14 +16,9 @@ export const searchIconApi = (url: string) => {
   })
 }
 
-export interface searchKeyWordListType {
-  type: 'stearch'
-  value: string
-}
-
 interface searchKeyWordType {
   kw: string
-  list: searchKeyWordListType[]
+  list: string[]
 }
 
 // 搜索联锁词

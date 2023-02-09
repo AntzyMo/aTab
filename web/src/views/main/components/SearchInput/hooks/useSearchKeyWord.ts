@@ -1,12 +1,12 @@
-import { type Ref, reactive, ref } from 'vue'
+import type { Ref } from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 
-import type { searchKeyWordListType } from '@/api'
 import { searchKeywordApi } from '@/api'
 
 let timer: number
 
 export default (serachValue: Ref<string>) => {
-  const keyWordList = ref<searchKeyWordListType[]>([])
+  const keyWordList = ref<string[]>([])
   const keyWordListActive = ref(-1)
 
   const pinyin = reactive({
@@ -38,14 +38,15 @@ export default (serachValue: Ref<string>) => {
     if (!keyWordList.value.length) return
     keyWordListActive.value++
     if (keyWordListActive.value > keyWordList.value.length - 1) keyWordListActive.value = 0
-    serachValue.value = keyWordList.value[keyWordListActive.value].value
+    serachValue.value = keyWordList.value[keyWordListActive.value]
   }
 
   const searchKeyWordUp = () => {
-    if (!keyWordList.value.length) return
+    const keyWordListLength = keyWordList.value.length
+    if (!keyWordListLength) return
     keyWordListActive.value--
-    if (keyWordListActive.value < 0) keyWordListActive.value = keyWordList.value.length - 1
-    serachValue.value = keyWordList.value[keyWordListActive.value].value
+    if (keyWordListActive.value < 0) keyWordListActive.value = keyWordListLength - 1
+    serachValue.value = keyWordList.value[keyWordListActive.value]
   }
 
   // 拼音开始输入

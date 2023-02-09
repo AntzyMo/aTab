@@ -18,10 +18,7 @@ export const getBaiduSearchKeyWord = async (wd: string) => {
   const { g } = res.data
 
   if (g) {
-    list = g.map((item: { q: any }) => ({
-      type: 'search',
-      value: item.q
-    }))
+    list = g.map((item: { q: any }) => item.q)
   }
   return list
 }
