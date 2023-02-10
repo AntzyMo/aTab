@@ -1,24 +1,11 @@
-import axios from 'axios'
-
-export interface searchKeywordListType {
-  type: 'search'
-  value: string
-}
+import { baiduSearchKeyWordApi } from '../api'
 
 export const getBaiduSearchKeyWord = async (wd: string) => {
-  const res = await axios.get('https://www.baidu.com/sugrec', {
-    params: {
-      prod: 'pc',
-      wd
-    }
-  })
+  let list: string[] = []
 
-  let list: searchKeywordListType[] = []
-
-  const { g } = res.data
-
+  const { g } = await baiduSearchKeyWordApi(wd)
   if (g) {
-    list = g.map((item: { q: any }) => item.q)
+    list = g.map(item => item.q)
   }
   return list
 }

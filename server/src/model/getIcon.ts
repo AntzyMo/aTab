@@ -1,29 +1,24 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
+import { getInfinityIcon, getInfinityTitle } from '../api'
+
 // 获取 Infinityicon
 export const getInfinityIconApi = async (url: string) => {
   const resData = {
     name: '',
     iconArr: [] as string[]
   }
+
   // 1. 获取名称
-  const res = await axios.get('https://api.infinitynewtab.com/v2/icon/title', {
-    params: {
-      url
-    }
-  })
-  if (!res.data.data) return resData
+  const res = await getInfinityTitle(url)
+  if (!res.data) return resData
 
   // 2. 获取icon
-  const iconRes = await axios.get('https://api.infinitynewtab.com/v2/icon/get_logo_list', {
-    params: {
-      host: url,
-      limit: 100
-    }
-  })
-  resData.name = res.data.data.title
-  const iconArr = iconRes.data.data.map((item: { src: any }) => item.src)
+  const iconRes = await getInfinityIcon(url)
+
+  resData.name = res.data.title
+  const iconArr = iconRes.data.map(item => item.src)
   if (iconArr.length) resData.iconArr = iconArr
   return resData
 }
