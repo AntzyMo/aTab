@@ -23,6 +23,7 @@
 
   // 回车搜索
   const confrim = (val?: string) => {
+    if (!val) return
     const url = searchUrlMap.value[searchSelectValue.value].url
     window.open(url + val)
     clearSearchValue()

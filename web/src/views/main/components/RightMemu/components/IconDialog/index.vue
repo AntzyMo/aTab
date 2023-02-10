@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import 'element-plus/theme-chalk/el-message.css'
-
   import type { FormInstance } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import { storeToRefs } from 'pinia'
@@ -292,6 +290,7 @@
       align-items: center;
       width: 420px;
       flex-wrap: wrap;
+      margin: 24px 0;
     }
 
     .tabbox {

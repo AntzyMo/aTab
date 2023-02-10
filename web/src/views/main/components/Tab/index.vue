@@ -8,6 +8,22 @@
   import HandleIcon from '@/components/icon/HandleIcon.vue'
   import { useRightMemuStore, useTabStore } from '@/stores'
   import type { tabMapType } from '@/stores/index'
+
+  import type { memuItem } from '../RightMemu/type'
+
+  const memuList: memuItem[] = [
+    {
+      name: '编辑图标',
+      icon: HandleIcon,
+      type: 'handleIcon'
+    },
+    {
+      name: '删除',
+      icon: DelIcon,
+      type: 'delTab'
+    }
+  ]
+
   const { tabMap } = storeToRefs(useTabStore())
   const { getAllChromeStorageTab, delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
   const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
@@ -24,19 +40,7 @@
   const tabRightClick = (e: MouseEvent, item: tabMapType) => {
     const { x, y } = e
     openRightMenu(x, y)
-    rightMemuList.value = [
-      {
-        name: '编辑图标',
-        icon: HandleIcon,
-        type: 'handleIcon'
-      },
-      {
-        name: '删除',
-        icon: DelIcon,
-        type: 'delTab'
-      }
-    ]
-
+    rightMemuList.value = memuList
     tabHandleData.value = item
   }
 </script>

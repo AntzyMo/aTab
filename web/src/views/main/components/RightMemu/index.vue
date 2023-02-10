@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  import 'element-plus/theme-chalk/el-message.css'
-  import 'element-plus/theme-chalk/el-message-box.css'
-
   import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
@@ -63,8 +60,6 @@
 
     // 批量删除
     if (type === 'delAllTab') {
-      console.log(111)
-
       showTabDel()
     }
 
