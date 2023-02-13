@@ -25,17 +25,9 @@
   ]
 
   const { tabMap } = storeToRefs(useTabStore())
-  const { getAllChromeStorageTab, delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
+  const { delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
   const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
-
-  const getTab = async () => {
-    await getAllChromeStorageTab()
-  }
-
-  onMounted(() => {
-    getTab()
-  })
 
   const tabRightClick = (e: MouseEvent, item: tabMapType) => {
     const { x, y } = e

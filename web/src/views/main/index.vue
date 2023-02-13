@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
+  import { onMounted } from 'vue'
 
-  import { useRightMemuStore } from '@/stores'
+  import { useRightMemuStore, useTabStore } from '@/stores'
 
   import { pageVisibilitychange } from '../../utils/index'
   import RightMemu from './components/RightMemu/index.vue'
@@ -9,8 +10,18 @@
   import Tab from './components/Tab/index.vue'
   import useRightMemu from './hooks/useRightMemu'
 
+  const { getAllChromeStorageTab } = useTabStore()
+
   const { showRightMenu, rightClick, rightMemuList, mainClick } = useRightMemu()
   const { mouseXY } = storeToRefs(useRightMemuStore())
+
+  const getTab = async () => {
+    await getAllChromeStorageTab()
+  }
+
+  onMounted(() => {
+    getTab()
+  })
 
   // 监听页面进入
   pageVisibilitychange(() => {
@@ -46,7 +57,11 @@
   .container {
     position: relative;
     height: 100vh;
-    background: url('../../assets/bg.webp');
+    background: url('../../assets/bg.webp') no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
 
