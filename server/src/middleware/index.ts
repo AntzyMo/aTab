@@ -12,7 +12,7 @@ export const handleError: Middleware = async (ctx, next) => {
     ctx.body = {
       code: 500,
       data: null,
-      msg: error
+      msg: error.message
     }
   }
 }
