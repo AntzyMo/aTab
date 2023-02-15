@@ -2,7 +2,7 @@
   // @ts-expect-error
   import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
-  import Main from './views/main/index.vue'
+  import Main from './views/index.vue'
 </script>
 
 <template>

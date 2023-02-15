@@ -4,7 +4,7 @@
 
   import { useRightMemuStore, useTabStore } from '@/stores'
 
-  import { pageVisibilitychange } from '../../utils/index'
+  import { pageVisibilitychange } from '../utils/index'
   import RightMemu from './components/RightMemu/index.vue'
   import SearchInput from './components/SearchInput/index.vue'
   import Tab from './components/Tab/index.vue'
@@ -57,7 +57,7 @@
   .container {
     position: relative;
     height: 100vh;
-    background: url('../../assets/bg.webp') no-repeat;
+    background: url('../assets/bg.webp') no-repeat;
     background-position: center;
     background-size: cover;
     width: 100%;
