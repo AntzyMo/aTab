@@ -1,50 +1,59 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
+import * as nodeURL from 'node:url'
 
-import { getInfinityIcon, getInfinityTitle } from '../api'
+import { getItabIconApi } from '../api'
 
-// 获取 Infinityicon
-export const getInfinityIconApi = async (url: string) => {
-  const resData = {
-    name: '',
-    iconArr: [] as string[]
+interface createIconDataType {
+  name: string
+  iconArr: { img: string; bgColor: string }[]
+}
+class CreateIconData {
+  name: string
+  iconArr: createIconDataType['iconArr']
+
+  constructor(options?: createIconDataType) {
+    this.name = options?.name || ''
+    this.iconArr = options?.iconArr || []
   }
+}
 
-  // 1. 获取名称
-  const res = await getInfinityTitle(url)
-  if (!res.data) return resData
+// 获取iTab的Icon
+export const getItabIcon = async (url: string) => {
+  const data = new CreateIconData()
+  const res = await getItabIconApi(url)
+  if (!res.data) return data
 
-  // 2. 获取icon
-  const iconRes = await getInfinityIcon(url)
-
-  resData.name = res.data.title
-  const iconArr = iconRes.data.map(item => item.src)
-  if (iconArr.length) resData.iconArr = iconArr
-  return resData
+  data.name = res.data.name
+  if (res.data.icon) {
+    data.iconArr = res.data.icon.map(item => ({ img: item, bgColor: '' }))
+  } else {
+    data.iconArr = [{ img: res.data.imgSrc, bgColor: res.data.backgroundColor }]
+  }
+  return data
 }
 
 // 爬取网站icon
 export const getUrlIcon = async (url: string) => {
-  if (url.endsWith('/')) url = url.slice(0, -1)
+  const { host, protocol } = nodeURL.parse(url)
+  const iconUrl = `${protocol}//${host}`
 
   const iconMap: string[] = []
 
-  const res = await axios.get(url)
+  const res = await axios.get(iconUrl)
   const $ = cheerio.load(res.data)
 
-  $('link[rel*=icon]').each(function (i) {
-    const iconUrl = $(this).attr('href')!
-    console.log('iconUrl', iconUrl)
-    const hasCom = iconUrl.includes('com')
-    const hasHttp = iconUrl.includes('http')
-
-    if (hasCom && !hasHttp) {
-      iconMap[i] = `https:${iconUrl}`
-    } else if (!hasHttp) {
-      iconMap[i] = url + iconUrl
-    } else {
-      iconMap[i] = iconUrl
-    }
+  $('link[rel*=icon]').each(function () {
+    const imgHref = $(this).attr('href')!
+    const parseUrl = nodeURL.parse(imgHref)
+    if (!host) iconMap.push(iconUrl + parseUrl)
   })
-  return [...new Set(iconMap)]
+
+  // 去重
+  const handleSameIconMap = [...new Set(iconMap)]
+
+  return new CreateIconData({
+    name: $('title').text(),
+    iconArr: handleSameIconMap.map(item => ({ img: item, bgColor: '' }))
+  })
 }

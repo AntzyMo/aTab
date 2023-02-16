@@ -1,8 +1,7 @@
 import request from '@/utils/request'
 
-interface searchIconType {
-  iconArr: string[]
-  url: string
+export interface searchIconType {
+  iconArr: { img: string; bgColor: string }[]
   name: string
 }
 

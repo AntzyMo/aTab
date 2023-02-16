@@ -4,6 +4,7 @@
   import { storeToRefs } from 'pinia'
   import { reactive, ref } from 'vue'
 
+  import type { searchIconType } from '@/api'
   import { searchIconApi } from '@/api'
   import Dialog from '@/components/Dialog/index.vue'
   import BlueCheckIcon from '@/components/icon/BlueCheckIcon.vue'
@@ -14,7 +15,7 @@
   interface iconFormType {
     url: string
     name: string
-    iconList: string[]
+    iconList: searchIconType['iconArr']
     iconActive: number
     id: number
     colorPicker: string
@@ -59,10 +60,13 @@
   // 查询图标
   const getIcon = async () => {
     loading.value = true
-    const { iconArr, name } = await searchIconApi(iconForm.url)
-    loading.value = false
-    iconForm.iconList = iconArr
-    if (name) iconForm.name = name
+    try {
+      const { iconArr, name } = await searchIconApi(iconForm.url)
+      iconForm.iconList = iconArr
+      if (name) iconForm.name = name
+    } finally {
+      loading.value = false
+    }
   }
 
   // 打开弹窗
@@ -74,11 +78,11 @@
       const { name, url, iconUrl, id, bgColor } = data
       iconForm.url = url
       iconForm.id = id
-      if (iconUrl) await getIcon()
       iconForm.name = name
+      if (iconUrl) iconForm.iconList = [{ img: iconUrl, bgColor }]
       iconForm.colorPicker = bgColor
       iconForm.colorItemActive = colorList.indexOf(bgColor)
-      iconForm.iconActive = iconForm.iconList.findIndex(item => item === iconUrl)
+      iconForm.iconActive = iconForm.iconList.findIndex(item => item.img === iconUrl)
     } else {
       dialogTitle.value = '添加图标'
       formRef.value?.resetFields()
@@ -88,19 +92,20 @@
   // 保存图标并继续
   const saveIcon = () => {
     const { name, url, iconList, iconActive, id, colorPicker } = iconForm
-    const params = {
+    console.log('iconForm', iconForm)
+    const params: tabMapType = {
       name,
       url,
-      iconUrl: iconList[iconActive],
+      iconUrl: iconList?.[iconActive]?.img || '',
       id,
-      bgColor: colorPicker,
+      bgColor: iconList?.[iconActive]?.bgColor || colorPicker,
       isDel: false
     }
 
     if (dialogTitle.value === '修改图标') {
       setChromeStorageTab(id, params)
       ElMessage({
-        message: `修改成功`,
+        message: '修改成功',
         type: 'success'
       })
     } else {
@@ -221,10 +226,7 @@
           class="seachIconBox"
         >
           <!-- 文字图标 -->
-          <div
-            v-if="iconForm.name && !iconForm.iconList.length"
-            class="tabbox"
-          >
+          <div class="tabbox">
             <div
               class="imgbox"
               :style="{ background: iconForm.colorPicker }"
@@ -241,10 +243,15 @@
             class="tabbox"
             @click="() => (iconForm.iconActive = index)"
           >
-            <div class="imgbox">
+            <div
+              class="imgbox"
+              :style="{
+                background: item.bgColor
+              }"
+            >
               <img
-                :src="item"
-                :alt="item"
+                :src="item.img"
+                :alt="item.img"
               />
               <BlueCheckIcon
                 v-if="iconForm.iconActive === index"
@@ -295,7 +302,6 @@
       align-items: center;
       width: 420px;
       flex-wrap: wrap;
-      margin: 24px 0;
     }
 
     .tabbox {
@@ -321,7 +327,6 @@
         img {
           width: 100%;
           user-select: none;
-          object-fit: scale-down;
         }
 
         .bluecheckicon {

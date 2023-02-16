@@ -1,31 +1,31 @@
 import request from '../utils/request'
 
-// 获取网站名称
 interface DataResType<T> {
   data: T
 }
-export const getInfinityTitle = async (url: string) => {
-  return request<null, DataResType<{ title: string } | null>>('https://api.infinitynewtab.com/v2/icon/title', {
-    method: 'get',
-    params: {
-      url
-    }
-  })
+
+interface iTabIconResType {
+  backgroundColor: string
+  imgSrc: string
+  name: string
+  src: string
+  type: string
+  url: string
+  _id: string
+  icon: string[]
 }
 
-interface InfinityIconResType {
-  _id: string
-  url: string
-  src: string
-  source: string
-}
-// 获取网站名称
-export const getInfinityIcon = async (url: string) => {
-  return request<null, DataResType<InfinityIconResType[]>>('https://api.infinitynewtab.com/v2/icon/get_logo_list', {
+// 获取iTabicon
+export const getItabIconApi = async (url: string) => {
+  return request<null, DataResType<iTabIconResType>>('https://api.codelife.cc/website/info', {
     method: 'get',
+    headers: {
+      signaturekey: '123',
+      version: '123'
+    },
     params: {
-      host: url,
-      limit: 100
+      lang: 'cn',
+      url
     }
   })
 }
@@ -33,7 +33,7 @@ export const getInfinityIcon = async (url: string) => {
 interface baiduSearchKeyWordResType {
   g: { q: string }[] | null
 }
-// 获取网站名称
+// 百度联想词
 export const baiduSearchKeyWordApi = async (wd: string) => {
   return request<null, baiduSearchKeyWordResType>('https://www.baidu.com/sugrec', {
     method: 'get',

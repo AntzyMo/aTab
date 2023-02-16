@@ -1,18 +1,18 @@
 import Router from '@koa/router'
 
-import { getInfinityIconApi, getUrlIcon } from '../model/getIcon'
+import { getItabIcon, getUrlIcon } from '../model/getIcon'
 import { getBaiduSearchKeyWord } from '../model/searchKeyword'
 const router = new Router()
 
 // 获取网站的 icon
 router.get('/getIcon', async ctx => {
   const { url } = ctx.request.query as { url: string }
-  const data = await getInfinityIconApi(url)
+  let params = await getItabIcon(url)
 
-  if (!data.iconArr.length) {
-    data.iconArr = await getUrlIcon(url)
+  if (!params.iconArr.length) {
+    params = await getUrlIcon(url)
   }
-  return data
+  return params
 })
 
 // 获取输入框联锁词

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref, shallowRef } from 'vue'
 
-import type { memuItem } from '../views/main/components/RightMemu/type'
+import type { memuItem } from '../views/components/RightMemu/type'
 
 export interface tabMapType {
   name: string
@@ -18,6 +18,7 @@ const fixTabData = (tabs: any): tabMapType[] => {
   const arr: tabMapType[] = Object.values(tabs)
   arr.forEach(item => {
     item.isDel = false
+    item.bgColor = ''
   })
   return arr
 }

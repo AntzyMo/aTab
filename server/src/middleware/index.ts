@@ -9,6 +9,7 @@ export const handleError: Middleware = async (ctx, next) => {
       msg: '请求成功'
     }
   } catch (error) {
+    console.log('error', error)
     ctx.body = {
       code: 500,
       data: null,

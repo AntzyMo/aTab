@@ -8,7 +8,7 @@ const ipConfig = {
 // 创建一个axios实例
 const service = axios.create({
   baseURL: import.meta.env.DEV ? ipConfig.dev : ipConfig.build,
-  timeout: 50000
+  timeout: 5 * 1000
 })
 
 // 设置请求拦截

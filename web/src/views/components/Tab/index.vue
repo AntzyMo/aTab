@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
-  import { onMounted } from 'vue'
   import Draggable from 'vuedraggable'
 
   import CloseIcon from '@/components/icon/CloseIcon.vue'
@@ -55,7 +54,7 @@
           class="imgBox"
           :class="{ delTabAim: item.isDel }"
           :style="{
-            background: !item.iconUrl ? item.bgColor : ''
+            background: item.bgColor
           }"
         >
           <img
@@ -137,7 +136,6 @@
 
         img {
           width: 100%;
-          object-fit: scale-down;
           border-radius: 16px;
         }
 
