@@ -1,9 +1,8 @@
+import { useDebounceFn } from '@vueuse/core'
 import type { Ref } from 'vue'
-import { nextTick, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 import { searchKeywordApi } from '@/api'
-
-let timer: number
 
 export default (serachValue: Ref<string>) => {
   const keyWordList = ref<string[]>([])
@@ -14,22 +13,19 @@ export default (serachValue: Ref<string>) => {
     end: 0,
     flag: false
   })
+  const useSeachDebounce = useDebounceFn(() => 'response', 100, { rejectOnCancel: true })
 
   // 防抖搜索
-  const debounceSearchKeyWord = (val: string) => {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(async () => {
-      if (!val) {
-        keyWordList.value = []
-        return
-      }
-
+  const debounceSearchKeyWord = async (val: string) => {
+    if (!val) return (keyWordList.value = [])
+    try {
+      await useSeachDebounce()
       const { list } = await searchKeywordApi(val)
       keyWordList.value = list
-    }, 100)
+    } catch {}
   }
 
-  const searchKeyWord = (val: string) => {
+  const searchKeyWord = async (val: string) => {
     if (pinyin.flag) return
     debounceSearchKeyWord(val)
   }

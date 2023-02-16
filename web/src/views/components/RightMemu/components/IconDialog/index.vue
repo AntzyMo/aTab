@@ -23,6 +23,7 @@
 
   const { pushChromeStorageTab, setChromeStorageTab } = useTabStore()
   const { tabMap } = storeToRefs(useTabStore())
+
   const formRef = ref<FormInstance>()
 
   const dialogVisiable = ref(false)
@@ -178,12 +179,14 @@
           </template>
         </el-input>
       </el-form-item>
+
       <el-form-item
         label="名称"
         prop="name"
       >
         <el-input v-model.trim="iconForm.name" />
       </el-form-item>
+
       <el-form-item
         v-if="iconForm.name && !iconForm.iconList.length"
         label="图标颜色"
@@ -211,7 +214,8 @@
           />
         </div>
       </el-form-item>
-      <el-form-item>
+
+      <el-form-item prop="iconActive">
         <div
           v-loading="loading"
           class="seachIconBox"
@@ -251,6 +255,7 @@
           </div>
         </div>
       </el-form-item>
+
       <el-form-item>
         <div>
           <el-button

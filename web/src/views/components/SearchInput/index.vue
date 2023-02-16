@@ -3,6 +3,7 @@
 
   import CloseIcon from '@/components/icon/CloseIcon.vue'
   import SearchIcon from '@/components/icon/SearchIcon.vue'
+  import { pageVisibilitychange } from '@/utils'
 
   import useSearchKeyWord from './hooks/useSearchKeyWord'
   import useSearchSelect from './hooks/useSearchSelect'
@@ -36,6 +37,11 @@
     keyWordList.value = []
     keyWordListActive.value = -1
   }
+
+  // 监听页面进入
+  pageVisibilitychange(() => {
+    clearSearchValue()
+  })
 </script>
 
 <template>
