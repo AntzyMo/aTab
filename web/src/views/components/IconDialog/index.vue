@@ -193,7 +193,6 @@
       </el-form-item>
 
       <el-form-item
-        v-if="iconForm.name && !iconForm.iconList.length"
         label="图标颜色"
         prop="colorItemActive"
       >
@@ -201,7 +200,7 @@
           <div
             v-for="(item, index) in colorList"
             :key="item"
-            class="colorItem cursor"
+            class="cursor colorItem"
             :style="{
               background: item
             }"

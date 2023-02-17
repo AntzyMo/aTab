@@ -1,13 +1,7 @@
 <script setup lang="ts">
-  import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
-  import { useRightMemuStore, useTabStore } from '@/stores'
-
-  import IconDialog from './components/IconDialog/index.vue'
-  import type { memuItem } from './type'
-
-  type iconDialogRefType = InstanceType<typeof IconDialog> | null
+  import type { memuItem } from '@/views/type'
 
   interface PropsType {
     x: number
@@ -19,11 +13,6 @@
   const { x = 0, y } = defineProps<PropsType>()
   const emit = defineEmits(['update:modelValue'])
 
-  const { tabHandleData } = storeToRefs(useRightMemuStore())
-  const { tabMap } = storeToRefs(useTabStore())
-
-  const { delChromeStoreTab, showTabDel } = useTabStore()
-  const iconDialogRef = ref<iconDialogRefType>(null)
   const rightMemuRef = ref<HTMLDivElement | null>(null)
 
   // 计算右键坐标防止右侧和底部溢出
@@ -49,51 +38,30 @@
 
   // 点击右键菜单列表
   const clickRightMemuItem = async (item: memuItem) => {
-    const { type } = item
-    if (type === 'addIcon') {
-      iconDialogRef.value?.openDialog()
-    }
-
-    if (type === 'handleIcon') {
-      iconDialogRef.value?.openDialog(tabHandleData.value!)
-    }
-
-    // 批量删除
-    if (type === 'delAllTab') {
-      showTabDel()
-    }
-
-    if (type === 'delTab') {
-      const idx = tabMap.value.findIndex(item => item.id === tabHandleData.value?.id)
-      delChromeStoreTab(idx)
-    }
+    const { click } = item
+    click()
     emit('update:modelValue', false)
   }
 </script>
 
 <template>
-  <Teleport to="body">
+  <div
+    v-show="modelValue"
+    id="name"
+    ref="rightMemuRef"
+    class="memu-box"
+    :style="leftTopStyle"
+  >
     <div
-      v-show="modelValue"
-      id="name"
-      ref="rightMemuRef"
-      class="memu-box"
-      :style="leftTopStyle"
+      v-for="item in data"
+      :key="item.name"
+      class="item"
+      @click="clickRightMemuItem(item)"
     >
-      <div
-        v-for="item in data"
-        :key="item.name"
-        class="item"
-        @click="clickRightMemuItem(item)"
-      >
-        <span>{{ item.name }}</span>
-        <component :is="item.icon" />
-      </div>
+      <span>{{ item.name }}</span>
+      <component :is="item.icon" />
     </div>
-
-    <!-- 图标弹窗 -->
-    <IconDialog ref="iconDialogRef" />
-  </Teleport>
+  </div>
 </template>
 
 <style lang="scss" scoped>

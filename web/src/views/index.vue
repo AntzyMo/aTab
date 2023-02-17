@@ -1,19 +1,24 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
-  import { onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
 
   import { useRightMemuStore, useTabStore } from '@/stores'
 
   import { pageVisibilitychange } from '../utils/index'
+  import IconDialog from './components/IconDialog/index.vue'
   import RightMemu from './components/RightMemu/index.vue'
   import SearchInput from './components/SearchInput/index.vue'
   import Tab from './components/Tab/index.vue'
   import useRightMemu from './hooks/useRightMemu'
+  import type { iconDialogRefType } from './type'
 
   const { getAllChromeStorageTab } = useTabStore()
-
-  const { showRightMenu, rightClick, rightMemuList, mainClick } = useRightMemu()
   const { mouseXY } = storeToRefs(useRightMemuStore())
+
+  const iconDialogRef = ref<iconDialogRefType>(null)
+  const { showRightMenu, tabRightClick, rightClick, rightMemuList, mainClick } = useRightMemu({
+    iconDialogRef
+  })
 
   const getTab = async () => {
     await getAllChromeStorageTab()
@@ -32,7 +37,7 @@
 <template>
   <div
     class="container"
-    @click.right.prevent="rightClick"
+    @click.right.prevent.stop="rightClick"
     @click="mainClick"
   >
     <header>
@@ -40,16 +45,20 @@
     </header>
 
     <main>
-      <Tab ref="tabRef" />
+      <Tab @right-click="tabRightClick" />
     </main>
 
-    <!-- 右键菜单 -->
-    <RightMemu
-      v-model="showRightMenu"
-      :x="mouseXY.x"
-      :y="mouseXY.y"
-      :data="rightMemuList"
-    />
+    <Teleport to="body">
+      <!-- 右键菜单 -->
+      <RightMemu
+        v-model="showRightMenu"
+        :x="mouseXY.x"
+        :y="mouseXY.y"
+        :data="rightMemuList"
+      />
+      <!-- 图标弹窗 -->
+      <IconDialog ref="iconDialogRef" />
+    </Teleport>
   </div>
 </template>
 

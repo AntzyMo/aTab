@@ -3,36 +3,22 @@
   import Draggable from 'vuedraggable'
 
   import CloseIcon from '@/components/icon/CloseIcon.vue'
-  import DelIcon from '@/components/icon/DelIcon.vue'
-  import HandleIcon from '@/components/icon/HandleIcon.vue'
   import { useRightMemuStore, useTabStore } from '@/stores'
   import type { tabMapType } from '@/stores/index'
 
-  import type { memuItem } from '../RightMemu/type'
-
-  const memuList: memuItem[] = [
-    {
-      name: '编辑图标',
-      icon: HandleIcon,
-      type: 'handleIcon'
-    },
-    {
-      name: '删除',
-      icon: DelIcon,
-      type: 'delTab'
-    }
-  ]
+  const emit = defineEmits<{
+    (e: 'rightClick', value: tabMapType): void
+  }>()
 
   const { tabMap } = storeToRefs(useTabStore())
   const { delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
-  const { rightMemuList, showRightMenu, tabHandleData } = storeToRefs(useRightMemuStore())
+  const { showRightMenu } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
 
   const tabRightClick = (e: MouseEvent, item: tabMapType) => {
     const { x, y } = e
     openRightMenu(x, y)
-    rightMemuList.value = memuList
-    tabHandleData.value = item
+    emit('rightClick', item)
   }
 </script>
 
