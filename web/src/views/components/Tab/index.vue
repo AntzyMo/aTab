@@ -12,7 +12,6 @@
 
   const { tabMap } = storeToRefs(useTabStore())
   const { delChromeStoreTab, setAllChromeStoreTab } = useTabStore()
-  const { showRightMenu } = storeToRefs(useRightMemuStore())
   const { openRightMenu } = useRightMemuStore()
 
   const tabRightClick = (e: MouseEvent, item: tabMapType) => {
@@ -34,7 +33,6 @@
         :href="item.url"
         class="tabBox"
         @click.right.prevent.stop="e => tabRightClick(e, item)"
-        @click="showRightMenu = false"
       >
         <div
           class="imgBox"

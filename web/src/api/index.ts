@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+import type { iTabBindWallpaperResType } from '../../../server/src/api/modules/wallpaper'
+
 export interface searchIconType {
   iconArr: { img: string; bgColor: string }[]
   name: string
@@ -27,6 +29,18 @@ export const searchKeywordApi = (wd: string) => {
     method: 'get',
     params: {
       wd
+    }
+  })
+}
+
+// 获取壁纸
+export const getWallpaper = (page = 1, type = 1) => {
+  return request<null, iTabBindWallpaperResType[]>({
+    url: '/getWallpaper',
+    method: 'get',
+    params: {
+      page,
+      type
     }
   })
 }

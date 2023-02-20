@@ -2,6 +2,8 @@ import Router from '@koa/router'
 
 import { getItabIcon, getUrlIcon } from '../model/getIcon'
 import { getBaiduSearchKeyWord } from '../model/searchKeyword'
+import { getItabBingWallpaper } from '../model/wallpaper'
+
 const router = new Router()
 
 // 获取网站的 icon
@@ -23,6 +25,13 @@ router.get('/searchKeyword', async ctx => {
     kw: wd,
     list
   }
+})
+
+// 获取壁纸
+router.get('/getWallpaper', async ctx => {
+  const { page, type } = ctx.request.query as { page: string; type: string }
+  const list = await getItabBingWallpaper(page)
+  return list
 })
 
 export default router

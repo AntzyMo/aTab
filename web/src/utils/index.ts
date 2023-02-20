@@ -6,3 +6,9 @@ export const pageVisibilitychange = (callback: () => void) => {
     }
   })
 }
+
+export const watchImageOnLoad = (src: string, callback: () => void) => {
+  const img = new Image()
+  img.src = src
+  img.onload = () => callback()
+}

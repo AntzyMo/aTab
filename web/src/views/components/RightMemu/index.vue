@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import { storeToRefs } from 'pinia'
   import { computed, ref } from 'vue'
 
+  import { useRightMemuStore } from '@/stores'
   import type { memuItem } from '@/views/type'
 
   interface PropsType {
@@ -12,8 +14,8 @@
 
   const { x = 0, y } = defineProps<PropsType>()
   const emit = defineEmits(['update:modelValue'])
-
   const rightMemuRef = ref<HTMLDivElement | null>(null)
+  const { rightMemuType } = storeToRefs(useRightMemuStore())
 
   // 计算右键坐标防止右侧和底部溢出
   const leftTopStyle = computed(() => {
@@ -52,15 +54,19 @@
     class="memu-box"
     :style="leftTopStyle"
   >
-    <div
+    <template
       v-for="item in data"
       :key="item.name"
-      class="item"
-      @click="clickRightMemuItem(item)"
     >
-      <span>{{ item.name }}</span>
-      <component :is="item.icon" />
-    </div>
+      <div
+        v-if="item.type === rightMemuType"
+        class="item"
+        @click="clickRightMemuItem(item)"
+      >
+        <span>{{ item.name }}</span>
+        <component :is="item.icon" />
+      </div>
+    </template>
   </div>
 </template>
 

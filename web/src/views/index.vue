@@ -4,28 +4,31 @@
 
   import { useRightMemuStore, useTabStore } from '@/stores'
 
+  import { useBgIamgeStore } from '../stores/index'
   import { pageVisibilitychange } from '../utils/index'
   import IconDialog from './components/IconDialog/index.vue'
   import RightMemu from './components/RightMemu/index.vue'
   import SearchInput from './components/SearchInput/index.vue'
   import Tab from './components/Tab/index.vue'
+  import WallpaperDialog from './components/wallpaperDialog/index.vue'
   import useRightMemu from './hooks/useRightMemu'
-  import type { iconDialogRefType } from './type'
+  import type { iconDialogRefType, wallpaperDialogRefType } from './type'
 
   const { getAllChromeStorageTab } = useTabStore()
+
   const { mouseXY } = storeToRefs(useRightMemuStore())
-
+  const { getStorageBgIamge } = useBgIamgeStore()
   const iconDialogRef = ref<iconDialogRefType>(null)
-  const { showRightMenu, tabRightClick, rightClick, rightMemuList, mainClick } = useRightMemu({
-    iconDialogRef
-  })
-
-  const getTab = async () => {
-    await getAllChromeStorageTab()
-  }
+  const wallpaperDialogRef = ref<wallpaperDialogRefType>(null)
+  const { showRightMenu, bgImage, watchTransformWallpaper, tabRightClick, rightClick, rightMemuList, mainClick } =
+    useRightMemu({
+      iconDialogRef,
+      wallpaperDialogRef
+    })
 
   onMounted(() => {
-    getTab()
+    getAllChromeStorageTab()
+    getStorageBgIamge()
   })
 
   // 监听页面进入
@@ -58,6 +61,12 @@
       />
       <!-- 图标弹窗 -->
       <IconDialog ref="iconDialogRef" />
+
+      <!-- 壁纸弹窗 -->
+      <WallpaperDialog
+        ref="wallpaperDialogRef"
+        @transform-wallpaper="watchTransformWallpaper"
+      />
     </Teleport>
   </div>
 </template>
@@ -66,13 +75,14 @@
   .container {
     position: relative;
     height: 100vh;
-    background: url('../assets/bg.webp') no-repeat;
-    background-position: center;
-    background-size: cover;
+    background: v-bind(bgImage);
+    background-position: center !important;
+    background-size: cover !important;
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background 0.5s, transform 0.3s;
 
     header {
       width: 100%;
@@ -90,5 +100,8 @@
       display: flex;
       justify-content: center;
     }
+  }
+  .wallpaperChange {
+    transform: scale(1.1);
   }
 </style>

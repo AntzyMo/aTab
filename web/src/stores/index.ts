@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { reactive, ref, shallowRef } from 'vue'
+import { reactive, ref } from 'vue'
 
-import type { memuItem } from '@/views/type'
+import defaultBgImage from '@/assets/bg.webp'
 
 export interface tabMapType {
   name: string
@@ -22,19 +22,20 @@ const fixTabData = (tabs: any): tabMapType[] => {
   return arr
 }
 
-// 标签 store
+// Tab store
 export const useTabStore = defineStore('tabs', () => {
   const tabMap = ref<tabMapType[]>([])
 
   const getAllChromeStorageTab = async () => {
-    const { tabs } = await chrome.storage.sync.get(['tabs'])
-    console.log(tabs, 'tav')
-    tabMap.value = fixTabData(tabs)
+    if (import.meta.env.PROD) {
+      const { tabs } = await chrome.storage.sync.get(['tabs'])
+      tabMap.value = fixTabData(tabs)
+    }
   }
 
   const pushChromeStorageTab = async (data: tabMapType) => {
     tabMap.value.push(data)
-    chrome.storage.sync.set({ tabs: tabMap.value })
+    if (import.meta.env.PROD) chrome.storage.sync.set({ tabs: tabMap.value })
   }
 
   const getChromeStorageTab = (id: number) => {
@@ -87,8 +88,8 @@ export const useTabStore = defineStore('tabs', () => {
 
 // 右键 store
 export const useRightMemuStore = defineStore('rightMenu', () => {
-  const showRightMenu = ref(false)
-  const rightMemuList = shallowRef<memuItem[]>([])
+  // 1: main 2: tab
+  const rightMemuType = ref<1 | 2>(1)
 
   // 储存右键修改图标的数据
   const tabHandleData = ref<tabMapType | null>(null)
@@ -101,8 +102,33 @@ export const useRightMemuStore = defineStore('rightMenu', () => {
   const openRightMenu = (x: number, y: number) => {
     mouseXY.x = x
     mouseXY.y = y
-    showRightMenu.value = true
   }
 
-  return { showRightMenu, rightMemuList, mouseXY, openRightMenu, tabHandleData }
+  return { rightMemuType, mouseXY, openRightMenu, tabHandleData }
+})
+
+//  背景图片 store
+export const useBgIamgeStore = defineStore('bgImage', () => {
+  const bgImage = ref('')
+  const bgTemplate = (src: string) => `url(${src}) no-repeat`
+
+  const getStorageBgIamge = async () => {
+    if (import.meta.env.PROD) {
+      const { bgImage: src } = await chrome.storage.local.get(['bgImage'])
+      bgImage.value = bgTemplate(src || defaultBgImage)
+      return
+    }
+    bgImage.value = bgTemplate(defaultBgImage)
+  }
+
+  const setStorageBgIamge = (src: string) => {
+    if (import.meta.env.PROD) {
+      chrome.storage.local.set({ bgImage: src })
+      return
+    }
+
+    localStorage.setItem('bgImage', src)
+  }
+
+  return { bgImage, setStorageBgIamge, getStorageBgIamge, bgTemplate }
 })

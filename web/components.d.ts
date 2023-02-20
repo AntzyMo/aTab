@@ -21,8 +21,13 @@ declare module '@vue/runtime-core' {
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     HandleIcon: typeof import('./src/components/icon/HandleIcon.vue')['default']
+    ImageIcon: typeof import('./src/components/icon/ImageIcon.vue')['default']
+    RightColDialog: typeof import('./src/components/RightColDialog/index.vue')['default']
     SearchIcon: typeof import('./src/components/icon/SearchIcon.vue')['default']
   }
   export interface ComponentCustomProperties {
