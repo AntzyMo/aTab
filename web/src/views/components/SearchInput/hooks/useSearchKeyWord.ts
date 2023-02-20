@@ -17,7 +17,7 @@ export default (serachValue: Ref<string>) => {
 
   // 防抖搜索
   const debounceSearchKeyWord = async (val: string) => {
-    if (!val) return (keyWordList.value = [])
+    if (pinyin.flag && !val) return (keyWordList.value = [])
     try {
       await useSeachDebounce()
       const { list } = await searchKeywordApi(val)
