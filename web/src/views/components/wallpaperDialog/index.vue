@@ -33,6 +33,7 @@
   const openDialog = async () => {
     dialogVisiable.value = true
     listLoading.value = true
+    wallpaperList.value = []
 
     try {
       await getList()
