@@ -76,13 +76,18 @@
     if (data) {
       dialogTitle.value = '修改图标'
       const { name, url, iconUrl, id, bgColor } = data
-      iconForm.url = url
-      iconForm.id = id
-      iconForm.name = name
-      if (iconUrl) iconForm.iconList = [{ img: iconUrl, bgColor }]
-      iconForm.colorPicker = bgColor
-      iconForm.colorItemActive = colorList.indexOf(bgColor)
-      iconForm.iconActive = iconForm.iconList.findIndex(item => item.img === iconUrl)
+
+      const hasIconList = iconUrl && { iconList: [{ img: iconUrl, bgColor }] }
+
+      Object.assign(iconForm, {
+        url,
+        id,
+        name,
+        colorPicker: bgColor,
+        colorItemActive: colorList.indexOf(bgColor),
+        iconActive: iconForm.iconList.findIndex(item => item.img === iconUrl),
+        ...hasIconList
+      })
     } else {
       dialogTitle.value = '添加图标'
       formRef.value?.resetFields()
@@ -200,7 +205,7 @@
           <div
             v-for="(item, index) in colorList"
             :key="item"
-            class="cursor colorItem"
+            class="colorItem cursor"
             :style="{
               background: item
             }"
@@ -282,6 +287,9 @@
 </template>
 
 <style lang="scss" scoped>
+  .title {
+    font-size: 20px;
+  }
   .form {
     margin-left: 20px;
 
