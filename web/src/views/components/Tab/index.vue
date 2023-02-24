@@ -150,6 +150,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         text-align: center;
+        z-index: 1;
       }
     }
   }

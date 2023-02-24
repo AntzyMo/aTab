@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import defaultBgImage from '@/assets/bg.webp'
+
+import { watchImageOnLoad } from '../utils/index'
 
 export interface tabMapType {
   name: string
@@ -108,27 +110,51 @@ export const useRightMemuStore = defineStore('rightMenu', () => {
 })
 
 //  背景图片 store
+
+interface bgImageType {
+  src: string
+  filter: number | string
+  mask: number | string
+}
 export const useBgIamgeStore = defineStore('bgImage', () => {
-  const bgImage = ref('')
-  const bgTemplate = (src: string) => `url(${src}) no-repeat`
+  const bgImage = reactive<bgImageType>({
+    src: '',
+    filter: 0,
+    mask: 0
+  })
 
-  const getStorageBgIamge = async () => {
+  const createBgImgTemplate = computed(() => `url(${bgImage.src}) no-repeat`)
+  const createBgFilterTemplate = computed(() => `blur(${(Number(bgImage.filter) * 40) / 100}px)`)
+  const createBgMaskTemplate = computed(() => `rgba(0, 0, 0, ${Number(bgImage.mask) / 100})`)
+
+  const getStorageBgIamge = () => {
     if (import.meta.env.PROD) {
-      const { bgImage: src } = await chrome.storage.local.get(['bgImage'])
-      bgImage.value = bgTemplate(src || defaultBgImage)
+      const bg = localStorage.getItem('bgImage') ? JSON.parse(localStorage.getItem('bgImage') as string) : ''
+      Object.assign(bgImage, {
+        src: bg.src || defaultBgImage,
+        filter: bg.filter || 0,
+        mask: bg.mask || 0
+      })
       return
     }
-    bgImage.value = bgTemplate(defaultBgImage)
+    bgImage.src = defaultBgImage
   }
 
-  const setStorageBgIamge = (src: string) => {
+  const setStorageBgIamge = (options: Partial<bgImageType>) => {
+    const params = { ...bgImage, ...options }
     if (import.meta.env.PROD) {
-      chrome.storage.local.set({ bgImage: src })
+      localStorage.setItem('bgImage', JSON.stringify(params))
       return
     }
-
-    localStorage.setItem('bgImage', src)
+    Object.assign(bgImage, options)
   }
 
-  return { bgImage, setStorageBgIamge, getStorageBgIamge, bgTemplate }
+  return {
+    createBgFilterTemplate,
+    createBgMaskTemplate,
+    bgImage,
+    setStorageBgIamge,
+    getStorageBgIamge,
+    createBgImgTemplate
+  }
 })

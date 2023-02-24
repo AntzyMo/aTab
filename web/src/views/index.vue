@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
-  import { onMounted, ref } from 'vue'
+  import { computed, onMounted, reactive, ref } from 'vue'
 
   import { useRightMemuStore, useTabStore } from '@/stores'
 
@@ -18,17 +18,17 @@
 
   const { mouseXY } = storeToRefs(useRightMemuStore())
   const { getStorageBgIamge } = useBgIamgeStore()
+  const { createBgImgTemplate, createBgFilterTemplate, createBgMaskTemplate } = storeToRefs(useBgIamgeStore())
   const iconDialogRef = ref<iconDialogRefType>(null)
   const wallpaperDialogRef = ref<wallpaperDialogRefType>(null)
-  const { showRightMenu, bgImage, watchTransformWallpaper, tabRightClick, rightClick, rightMemuList, mainClick } =
-    useRightMemu({
-      iconDialogRef,
-      wallpaperDialogRef
-    })
+  const { showRightMenu, watchTransformWallpaper, tabRightClick, rightClick, rightMemuList, mainClick } = useRightMemu({
+    iconDialogRef,
+    wallpaperDialogRef
+  })
 
+  getStorageBgIamge()
   onMounted(() => {
     getAllChromeStorageTab()
-    getStorageBgIamge()
   })
 
   // 监听页面进入
@@ -43,6 +43,8 @@
     @click.right.prevent.stop="rightClick"
     @click="mainClick"
   >
+    <div class="bg" />
+
     <header>
       <SearchInput class="searchInput-box" />
     </header>
@@ -74,15 +76,23 @@
 <style lang="scss" scoped>
   .container {
     position: relative;
-    height: 100vh;
-    background: v-bind(bgImage);
-    background-position: center !important;
-    background-size: cover !important;
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background: v-bind(createBgImgTemplate);
     transition: background 0.5s, transform 0.3s;
+    background-position: center !important;
+    background-size: cover !important;
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backdrop-filter: v-bind(createBgFilterTemplate);
+      background-color: v-bind(createBgMaskTemplate);
+    }
 
     header {
       width: 100%;

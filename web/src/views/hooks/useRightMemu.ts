@@ -25,8 +25,8 @@ export default (options: optionsType) => {
 
   const { openRightMenu } = useRightMemuStore()
   const { closeTabDel, showTabDel, delChromeStoreTab } = useTabStore()
-  const { bgTemplate, setStorageBgIamge } = useBgIamgeStore()
-  const { bgImage } = storeToRefs(useBgIamgeStore())
+  const { setStorageBgIamge } = useBgIamgeStore()
+  const { bgImage } = useBgIamgeStore()
   const showRightMenu = ref(false)
 
   const rightMemuList: memuItem[] = [
@@ -91,9 +91,9 @@ export default (options: optionsType) => {
   // 监听壁纸选中
   const watchTransformWallpaper = (item: wallpaperType) => {
     watchImageOnLoad(item.fullSrc, () => {
-      bgImage.value = bgTemplate(item.fullSrc)
+      bgImage.src = item.fullSrc
       item.loading = false
-      setStorageBgIamge(item.fullSrc)
+      setStorageBgIamge({ src: item.fullSrc })
     })
   }
 

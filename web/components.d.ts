@@ -25,6 +25,7 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
+    ElSlider: typeof import('element-plus/es')['ElSlider']
     HandleIcon: typeof import('./src/components/icon/HandleIcon.vue')['default']
     ImageIcon: typeof import('./src/components/icon/ImageIcon.vue')['default']
     RightColDialog: typeof import('./src/components/RightColDialog/index.vue')['default']

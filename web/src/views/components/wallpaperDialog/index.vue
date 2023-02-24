@@ -2,8 +2,10 @@
   import { ref } from 'vue'
 
   import { getWallpaper } from '@/api'
+  import localBgWallpaper from '@/assets/bg.webp'
   import CheckIcon from '@/components/icon/CheckIcon.vue'
   import RightColDialog from '@/components/RightColDialog/index.vue'
+  import { useBgIamgeStore } from '@/stores'
 
   import type { iTabBindWallpaperResType } from '../../../../../server/src/api/modules/wallpaper'
 
@@ -12,43 +14,75 @@
   }
 
   const emit = defineEmits(['transformWallpaper'])
+  const { bgImage, setStorageBgIamge } = useBgIamgeStore()
   const dialogVisiable = ref(false)
   const wallpaperTypeActive = ref(0) // 左侧壁纸库
-  const wallpaperTypeList = ['必应壁纸']
+
   const wallpaperList = ref<wallpaperType[]>([])
   const pageNum = ref(1)
   const listLoading = ref(false)
 
-  const getList = async (page = 1) => {
+  // 获取本地壁纸
+  const getLocalList = () => {
+    const list = [
+      {
+        fullSrc: localBgWallpaper,
+        thumb: localBgWallpaper,
+        loading: false
+      }
+    ]
+    wallpaperList.value = list
+  }
+
+  // 获取必应壁纸
+  const getBingList = async (page = 1) => {
     const data: wallpaperType[] = await getWallpaper(page)
     data.forEach(item => (item.loading = false))
     wallpaperList.value = [...wallpaperList.value, ...data]
   }
 
-  const transformWallpaper = (item: wallpaperType) => {
-    item.loading = true
-    emit('transformWallpaper', item)
+  const wallpaperTypeList = [
+    {
+      title: '本地壁纸',
+      getList: getLocalList
+    },
+    {
+      title: '必应壁纸',
+      getList: getBingList
+    }
+  ]
+
+  // 切换壁纸类型
+  const clickWallPaperType = async (index: number) => {
+    wallpaperTypeActive.value = index
+    listLoading.value = true
+    wallpaperList.value = []
+    try {
+      await wallpaperTypeList[index].getList()
+    } finally {
+      listLoading.value = false
+    }
   }
 
   const openDialog = async () => {
     dialogVisiable.value = true
-    listLoading.value = true
-    wallpaperList.value = []
-
-    try {
-      await getList()
-    } finally {
-      listLoading.value = false
-    }
+    wallpaperTypeActive.value = 0
+    wallpaperTypeList[0].getList()
   }
 
   const getMoreList = async () => {
     pageNum.value++
     try {
-      await getList(pageNum.value)
+      await wallpaperTypeList[wallpaperTypeActive.value].getList(pageNum.value)
     } finally {
       listLoading.value = false
     }
+  }
+
+  // 监听选中背景图片
+  const transformWallpaper = (item: wallpaperType) => {
+    item.loading = true
+    emit('transformWallpaper', item)
   }
 
   defineExpose({
@@ -60,16 +94,40 @@
   <RightColDialog v-model="dialogVisiable">
     <template #left>
       <div class="leftBox">
-        <h2>壁纸库</h2>
-        <div class="wallpaperTypeBox">
-          <div
-            v-for="(item, index) in wallpaperTypeList"
-            :key="index"
-            class="item"
-            :class="{ itemActive: wallpaperTypeActive === index }"
-            @click="wallpaperTypeActive = index"
-          >
-            {{ item }}
+        <div>
+          <h2>壁纸库</h2>
+          <div class="wallpaperTypeBox">
+            <div
+              v-for="(item, index) in wallpaperTypeList"
+              :key="index"
+              class="item"
+              :class="{ itemActive: wallpaperTypeActive === index }"
+              @click="clickWallPaperType(index)"
+            >
+              {{ item.title }}
+            </div>
+          </div>
+        </div>
+        <div class="bgImgParamsBox">
+          <div class="box">
+            <div class="title">遮罩</div>
+            <div class="silderBox">
+              <el-slider
+                v-model="bgImage.mask"
+                @change="setStorageBgIamge({ mask: bgImage.mask })"
+              />
+              <div class="number">{{ bgImage.mask }}%</div>
+            </div>
+          </div>
+          <div class="box">
+            <div class="title">模糊</div>
+            <div class="silderBox">
+              <el-slider
+                v-model="bgImage.filter"
+                @change="setStorageBgIamge({ filter: bgImage.filter })"
+              />
+              <div class="number">{{ bgImage.filter }}%</div>
+            </div>
           </div>
         </div>
       </div>
@@ -85,13 +143,10 @@
         />
       </div>
       <template v-else>
-        <div
-          class="imageBox"
-          height="100%"
-        >
+        <div class="imageBox">
           <div
             v-for="item in wallpaperList"
-            :key="item.fullSrc"
+            :key="item.thumb"
             class="item"
             @click="transformWallpaper(item)"
           >
@@ -117,7 +172,7 @@
           </div>
         </div>
         <div
-          v-if="wallpaperList.length"
+          v-if="wallpaperList.length >= 10"
           class="btns"
         >
           <el-button @click="getMoreList">加载更多</el-button>
@@ -128,6 +183,10 @@
 </template>
 
 <style lang="scss" scoped>
+  :deep(.el-slider__button) {
+    width: 10px;
+    height: 10px;
+  }
   .leftBox {
     background: #f0f1f4;
     width: 163px;
@@ -136,6 +195,9 @@
     border-bottom-left-radius: 5px;
     padding-top: 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     h2 {
       display: inline-block;
@@ -161,6 +223,27 @@
 
         &:hover {
           color: #fff;
+        }
+      }
+    }
+
+    .bgImgParamsBox {
+      .title {
+        font-size: 12px;
+      }
+      .box {
+        padding: 0 10px;
+        margin-bottom: 16px;
+        .silderBox {
+          display: flex;
+          align-items: center;
+          margin-left: 5px;
+          .number {
+            width: 8ch;
+            font-size: 12px;
+            text-align: center;
+            margin-left: 16px;
+          }
         }
       }
     }

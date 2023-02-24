@@ -23,13 +23,6 @@ export default defineConfig(({ command }) => ({
     }
   },
   build: {
-    outDir: '../chrome/dist',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    }
+    outDir: '../chrome/dist'
   }
 }))

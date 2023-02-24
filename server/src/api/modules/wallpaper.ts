@@ -2,13 +2,13 @@ import request from '../../utils/request'
 import type { DataResType } from '../type'
 
 export interface iTabBindWallpaperResType {
-  copyright: string
-  enddate: string
+  copyright?: string
+  enddate?: string
   fullSrc: string
-  raw: string
+  raw?: string
   thumb: string
-  urlbase: string
-  _id: string
+  urlbase?: string
+  _id?: string
 }
 
 // 获取iTab必应图片
