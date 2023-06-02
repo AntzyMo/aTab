@@ -1,12 +1,15 @@
 <script setup lang="ts">
-  // @ts-expect-error
-  import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-
-  import Main from './views/index.vue'
-</script>
+ </script>
 
 <template>
-  <el-config-provider :locale="zhCn">
-    <Main />
-  </el-config-provider>
+  <div p-3>
+    <header class="flex flex-justify-end">
+      <ADark/>
+    </header>
+
+    <main>
+      <ASearch/>
+    </main>
+  </div>
 </template>
+

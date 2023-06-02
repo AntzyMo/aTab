@@ -1,3 +1,1 @@
-module.exports = {
-  extends: '@antzy'
-}
+module.exports = { extends: '@antzy' }
