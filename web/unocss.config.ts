@@ -1,7 +1,7 @@
 import {
   defineConfig, presetAttributify,
   presetIcons, presetTypography,
-  presetUno, presetWebFonts
+  presetUno
 } from 'unocss'
 
 export default defineConfig({
@@ -9,7 +9,6 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
     presetTypography(),
-    presetWebFonts(),
     presetIcons({
       collections: {
         carbon: () => import('@iconify-json/carbon/icons.json').then(i => i.default)

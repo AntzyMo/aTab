@@ -2,12 +2,15 @@
  </script>
 
 <template>
-  <div p-3>
-    <header class="flex flex-justify-end">
+  <div p-3 font-sans>
+    <header
+      class="mb30"
+      flex="~ justify-end"
+    >
       <ADark/>
     </header>
 
-    <main>
+    <main flex="~ justify-center">
       <ASearch/>
     </main>
   </div>
