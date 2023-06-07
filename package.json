@@ -1,0 +1,17 @@
+{
+  "name": "a-tab",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -C packages/client run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@antzy/eslint-config": "^2.0.4",
+    "eslint": "^8.42.0",
+    "unocss": "^0.53.1"
+  }
+}
