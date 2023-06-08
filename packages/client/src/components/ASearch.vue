@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
+  import { vDebounce } from '@/directive'
+
   const searchValue = ref('')
   const keywordIdx = ref(-1)
   function keywordDown() {
@@ -35,6 +37,7 @@
       <div class="i-carbon:search opacity-60 text-2xl"/>
       <input
         v-model="searchValue"
+        v-debounce="'input'"
         class="bg-transparent font-sans h-full opacity-85 outline-none px3 text-lg w-full"
         border="1 solid transparent"
         placeholder="Search..."
