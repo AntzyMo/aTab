@@ -17,6 +17,7 @@ export default defineConfig({
   ],
   shortcuts: {
     'n-text-base': 'c-red dark:c-green',
-    'n-keywordActive': 'bg-black bg-opacity-4  dark:bg-opacity-4 dark:bg-white'
+    'n-keyword-active': 'bg-black bg-opacity-4  dark:bg-opacity-4 dark:bg-white'
+
   }
 })
