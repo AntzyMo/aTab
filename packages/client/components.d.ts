@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ADark: typeof import('./src/components/ADark.vue')['default']
     ASearch: typeof import('./src/components/ASearch.vue')['default']
+    ATab: typeof import('./src/components/ATab.vue')['default']
     Components: typeof import('./src/components/index.vue')['default']
   }
 }

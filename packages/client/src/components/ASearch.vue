@@ -26,7 +26,7 @@
 
 <template>
   <div
-    class="max-w-600px px4 rounded-10px transition-all"
+    class="max-w-600px px4 rounded-10px transition-all w-full"
     border="1 solid #62656a66"
     flex="~ 1  col"
   >

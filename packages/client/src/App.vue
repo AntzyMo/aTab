@@ -10,8 +10,9 @@
       <ADark/>
     </header>
 
-    <main flex="~ justify-center">
+    <main flex="~ col items-center">
       <ASearch/>
+      <ATab/>
     </main>
   </div>
 </template>
