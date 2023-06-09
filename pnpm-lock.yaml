@@ -11,6 +11,9 @@ importers:
       '@antzy/eslint-config':
         specifier: ^2.0.4
         version: 2.0.4(eslint@8.42.0)
+      '@iconify/vue':
+        specifier: ^4.1.1
+        version: 4.1.1(vue@3.3.2)
       eslint:
         specifier: ^8.42.0
         version: 8.42.0
@@ -556,6 +559,15 @@ packages:
       local-pkg: 0.4.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@iconify/vue@4.1.1(vue@3.3.2):
+    resolution: {integrity: sha512-RL85Bm/DAe8y6rT6pux7D2FJSiUEM/TPfyK7GrbAOfTSwrhvwJW+S5yijdGcmtXouA8MtuH9C7l4hiSE4mLMjg==}
+    peerDependencies:
+      vue: '>=3'
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.3.2
     dev: true
 
   /@jridgewell/gen-mapping@0.3.3:

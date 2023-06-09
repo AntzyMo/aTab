@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  import { vDebounce } from '@/directive'
-
   const searchValue = ref('')
   const keywordIdx = ref(-1)
   function keywordDown() {
@@ -26,8 +24,8 @@
 
 <template>
   <div
-    class="max-w-600px px4 rounded-10px transition-all w-full"
-    border="1 solid #62656a66"
+    class="b-base max-w-600px px4 rounded-10px transition-all w-full"
+    border="1 solid"
     flex="~ 1  col"
   >
     <div
@@ -51,9 +49,9 @@
 
     <div
       :class="{ '!h-0 !p-0 !b-none': !searchValue }"
-      class="gap-y-2 h-250px overflow-hidden py-2 transition-all-300"
+      class="b-base gap-y-2 h-250px overflow-hidden py-2 transition-all-300"
       flex="~ col"
-      border-t="1 solid #62656a66"
+      border-t="1 solid"
     >
       <div
         v-for="(item, index) in 6"

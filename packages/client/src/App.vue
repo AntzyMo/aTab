@@ -11,8 +11,8 @@
     </header>
 
     <main flex="~ col items-center">
-      <ASearch/>
-      <ATab/>
+      <ASearch class="mb10"/>
+      <Tab/>
     </main>
   </div>
 </template>

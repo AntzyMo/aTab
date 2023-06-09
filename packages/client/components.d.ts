@@ -9,9 +9,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ABlock: typeof import('./src/components/ABlock.vue')['default']
     ADark: typeof import('./src/components/ADark.vue')['default']
+    AIconDialog: typeof import('./src/components/AIconDialog.vue')['default']
+    AInput: typeof import('./src/components/AInput.vue')['default']
     ASearch: typeof import('./src/components/ASearch.vue')['default']
+    ASiteBlock: typeof import('./src/components/ASiteBlock.vue')['default']
     ATab: typeof import('./src/components/ATab.vue')['default']
     Components: typeof import('./src/components/index.vue')['default']
+    Tab: typeof import('./src/components/Tab.vue')['default']
   }
 }
