@@ -7,7 +7,6 @@
     clear: boolean
     placeholder: string
   }
-
   const props = withDefaults(defineProps<Props>(), {
     modelValue: '',
     icon: 'i-carbon:search',
@@ -15,7 +14,15 @@
     placeholder: 'Search...'
   })
 
+  const emit = defineEmits(['update:modelValue'])
+  defineOptions({ inheritAttrs: false })
+
   const searchValue = ref(props.modelValue)
+
+  function onInput(e: Event) {
+    const value = (e.target as HTMLInputElement).value
+    emit('update:modelValue', value)
+  }
 </script>
 
 <template>
@@ -27,11 +34,12 @@
     <div :class="icon" class="opacity-60 text-base"/>
     <input
       v-bind="$attrs"
-      v-model="searchValue"
+      :value="modelValue"
       class="bg-transparent flex-1 font-sans h-full opacity-85 outline-none px-2 w-full"
       border="1 solid transparent"
       :placeholder="placeholder"
       autofocus
+      @input="onInput"
     >
     <div
       v-if="clear"

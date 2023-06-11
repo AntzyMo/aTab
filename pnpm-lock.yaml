@@ -1186,7 +1186,7 @@ packages:
       chokidar: 3.5.3
       fast-glob: 3.2.12
       magic-string: 0.30.0
-      vite: 4.3.5(@types/node@18.16.8)(sass@1.63.2)
+      vite: 4.3.5(sass@1.63.2)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -3874,6 +3874,39 @@ packages:
         optional: true
     dependencies:
       '@types/node': 18.16.8
+      esbuild: 0.17.19
+      postcss: 8.4.24
+      rollup: 3.24.0
+      sass: 1.63.2
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite@4.3.5(sass@1.63.2):
+    resolution: {integrity: sha512-0gEnL9wiRFxgz40o/i/eTBwm+NEbpUeTWhzKrZDSdKm6nplj+z4lKz8ANDgildxHm47Vg8EUia0aicKbawUVVA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
       esbuild: 0.17.19
       postcss: 8.4.24
       rollup: 3.24.0
