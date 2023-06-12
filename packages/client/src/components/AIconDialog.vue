@@ -74,14 +74,15 @@
     iconActiveIdx.value = index
   }
 
-  function clearObj(obj: object) {
+  function clearEffect(obj: object) {
     // @ts-expect-error
     Object.keys(obj).forEach(key => obj[key] = '')
   }
 
   function close() {
     emit('update:modelValue', false)
-    clearObj(icon)
+    clearEffect(icon)
+    clearEffect(validate)
     icons.value = []
   }
 
@@ -99,7 +100,7 @@
 
 <template>
   <div v-if="modelValue" class="absolute box-border left-65% n-dialog p-3 rounded shadow-xl top-45% w-300px z-999">
-    <div v-if="validate.url || validate.name" class="c-orange flex opacity-60 text-1 translate-x-56px">
+    <div v-if="validate.url || validate.name" class="c-orange/60 flex text-1 translate-x-56px">
       <p class="scale-80">
         {{ validate.url || validate.name }}
       </p>
@@ -112,7 +113,7 @@
         <div>
           <AInput
             v-model="icon.url"
-            :outside-class="{ 'border-color-orange/40': validate.url }"
+            :outside-class="{ '!border-color-orange/40': validate.url }"
             placeholder="The URL..."
             icon="i-carbon:content-delivery-network"
             @blur="fetchIcon"
@@ -120,7 +121,7 @@
         </div>
         <AInput
           v-model="icon.name"
-          :outside-class="{ 'border-color-orange/40': validate.name }"
+          :outside-class="{ '!border-color-orange/40': validate.name }"
           placeholder="The Name..."
           icon="i-carbon:text-align-center"
           @blur="validateName"
