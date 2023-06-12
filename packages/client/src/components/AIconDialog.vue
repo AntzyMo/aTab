@@ -1,17 +1,31 @@
 <script setup lang="ts">
-  import { Icon } from '@iconify/vue'
-  import { useFetch } from '@vueuse/core'
-  import { reactive, ref, unref } from 'vue'
+  import { inject, reactive, ref } from 'vue'
+  import { Icon, disableCache } from '@iconify/vue'
+  import type { IconType } from '@/types'
 
-  const icon = reactive({
+  import { tabsKey } from '@/shared/provideKey'
+
+  defineProps<Props>()
+  const emit = defineEmits(['update:modelValue', 'submit'])
+  disableCache('all')
+
+  interface Props {
+    modelValue: boolean
+  }
+
+  const icons = ref([])
+  const iconActiveIdx = ref(0)
+  const tabs = inject(tabsKey)
+
+  const validate = reactive({
+    url: '',
+    name: ''
+  })
+  const icon = reactive<IconType>({
     url: '',
     name: '',
     logo: ''
   })
-  const fetchUrl = ref('')
-  const icons = ref([])
-  const iconActiveIdx = ref(0)
-  const { data: resData, execute } = useFetch(fetchUrl, { immediate: false }).json()
 
   // 获取二级域名
   function getSLD(url: string) {
@@ -19,13 +33,37 @@
     return domain.length > 2 ? domain[1] : domain[0]
   }
 
-  async function fetchIcon() {
+  function validateUrl() {
     const { url } = icon
-    if (!url) return// TODO: 警告 黄色框
+    if (!url) {
+      validate.url = 'URL can\'t be blank'
+    } else if (!url.includes('http')) {
+      validate.url = 'Add a URL with http:// or https://'
+    } else {
+      validate.url = ''
+    }
+  }
+
+  function validateName() {
+    const { name } = icon
+
+    if (!name.trim()) {
+      validate.name = 'Name can\'t be blank'
+    } else if (tabs!.value.some(tab => tab.name === name)) {
+      validate.name = 'name already exists'
+    } else {
+      validate.name = ''
+    }
+  }
+
+  async function fetchIcon() {
+    if (validate.url) return
+
+    const { url } = icon
     icon.name = getSLD(url)
-    fetchUrl.value = `https://api.iconify.design/search?query=${icon.name}`
-    await execute()
-    const data = unref(resData)
+    const res = await fetch(`https://api.iconify.design/search?query=${icon.name}`)
+    const data = await res.json()
+
     icon.logo = data.icons[0]
     icons.value = data.icons
   }
@@ -34,24 +72,67 @@
     icon.logo = item
     iconActiveIdx.value = index
   }
+
+  function clearObj(obj: object) {
+    // @ts-expect-error
+    Object.keys(obj).forEach(key => obj[key] = '')
+  }
+
+  function close() {
+    emit('update:modelValue', false)
+    clearObj(icon)
+    icons.value = []
+  }
+
+  function submit() {
+    validateUrl()
+    validateName()
+
+    const isValidate = Object.values(validate).every(() => Boolean)
+    if (isValidate) {
+      emit('submit', { ...icon })
+      close()
+    }
+  }
 </script>
 
 <template>
-  <div class="box-border n-dialog p-3 rounded shadow-xl w-300px">
+  <div v-if="modelValue" class="absolute box-border left-65% n-dialog p-3 rounded shadow-xl top-45% w-300px z-999">
+    <div v-if="validate.url || validate.name" class="c-orange flex opacity-60 text-1 translate-x-56px">
+      <p class="scale-80">
+        {{ validate.url || validate.name }}
+      </p>
+    </div>
     <div flex="~ items-start">
-      <ASiteBlock :icon="icon.logo" :name="icon.name" class="mr-2"/>
+      <div class="mr-2 w-58px">
+        <ASiteBlock :icon="icon.logo" :name="icon.name"/>
+      </div>
       <div class="gap-5px" flex="~ col 1">
+        <div>
+          <AInput
+            v-model="icon.url"
+            :outside-class="{ 'border-color-orange border-opacity-40': validate.url }"
+            placeholder="The URL..."
+            icon="i-carbon:content-delivery-network"
+            @blur="fetchIcon"
+          />
+        </div>
         <AInput
-          v-model="icon.url"
-          placeholder="The URL..."
-          icon="i-carbon:content-delivery-network"
-          @blur="fetchIcon"
+          v-model="icon.name"
+          :outside-class="{ 'border-color-orange border-opacity-40': validate.name }"
+          placeholder="The Name..."
+          icon="i-carbon:text-align-center"
+          @blur="validateName()"
         />
-        <AInput v-model="icon.name" placeholder="The Name..." icon="i-carbon:text-align-center"/>
       </div>
     </div>
     <div flex="~ justify-end">
-      <AButton>submit</AButton>
+      <AButton class="border-opacity-0 hover:!c-white hover:border-color-transparent hover:opacity-80 mr-1 opacity-30" @click="close">
+        close
+      </AButton>
+      <AButton @click="submit">
+        submit
+      </AButton>
     </div>
 
     <div
@@ -70,7 +151,7 @@
         <div class="b-base" flex="~ 1" border-b="1 solid"/>
       </div>
 
-      <div class="h-40 overflow-hidden overflow-y-auto p-1 select-none" flex="~ wrap">
+      <div class="col gap-8px max-h-40 overflow-hidden overflow-y-auto p-1 select-none" flex="~ wrap 1">
         <div
           v-for="(item, index) in icons"
           :key="item"

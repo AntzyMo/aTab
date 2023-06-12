@@ -17,7 +17,7 @@
     >
       <Icon :icon="icon" class="opacity-60 text-10"/>
     </div>
-    <span class="min-h-2 opacity-60">{{ name }}</span>
+    <span class="min-h-6 opacity-60 overflow-hidden text-center text-ellipsis text-nowrap w-full">{{ name }}</span>
   </a>
 </template>
 

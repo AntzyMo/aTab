@@ -1,13 +1,12 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-
   interface Props {
     modelValue: string
     icon: string
     clear: boolean
     placeholder: string
+    outsideClass: any
   }
-  const props = withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<Props>(), {
     modelValue: '',
     icon: 'i-carbon:search',
     clear: false,
@@ -16,8 +15,6 @@
 
   const emit = defineEmits(['update:modelValue'])
   defineOptions({ inheritAttrs: false })
-
-  const searchValue = ref(props.modelValue)
 
   function onInput(e: Event) {
     const value = (e.target as HTMLInputElement).value
@@ -30,6 +27,7 @@
     class="b-base px2 py-1 rounded transition-all"
     border="1 solid"
     flex="~ 1 items-center"
+    :class="outsideClass"
   >
     <div :class="icon" class="opacity-60 text-base"/>
     <input
@@ -43,9 +41,9 @@
     >
     <div
       v-if="clear"
-      :class="{ invisible: !searchValue }"
+      :class="{ invisible: !modelValue }"
       class="cursor-pointer  hover:opacity-80  i-carbon:close  opacity-60  text-base"
-      @click="searchValue = ''"
+      @click="$emit('update:modelValue', '')"
     />
   </div>
 </template>

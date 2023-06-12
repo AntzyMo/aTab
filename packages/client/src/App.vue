@@ -1,5 +1,13 @@
 <script setup lang="ts">
- </script>
+  import { provide } from 'vue'
+  import { useStorage } from '@vueuse/core'
+  import type { IconType } from '@/types'
+
+  import { tabsKey } from '@/shared/provideKey'
+
+  const tabs = useStorage<IconType[]>('tabs', [])
+  provide(tabsKey, tabs)
+</script>
 
 <template>
   <div p-3 font-sans>

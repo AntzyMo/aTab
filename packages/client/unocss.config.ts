@@ -16,7 +16,7 @@ export default defineConfig({
     })
   ],
   shortcuts: {
-    'n-dialog': 'bg-light  dark:bg-dark dark:bg-opacity-50',
+    'n-dialog': 'bg-light  dark:bg-#1a1a1a',
     'n-keyword-active': 'bg-black bg-opacity-4  dark:bg-opacity-4 dark:bg-white',
     'b-base': 'b-color-#62656a66'
 
