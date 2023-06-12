@@ -24,9 +24,9 @@
     <div class="relative">
       <div
         :class="{ 'addIcon-active': showIconDialog }"
-        class="b-base  border-base  cursor-pointer  group  h-14  hover:!border-opacity-40  hover:b-color-purple-500  mb-2  rel  rounded-xl  transition-all-300  w-14"
+        class="cursor-pointer  group  h-14  hover:b-color-purple-500/40  mb-2  rounded-xl  transition-all-300  w-14"
         flex="~ justify-center items-center"
-        border="1 dashed"
+        border="1 dashed b-base"
         @click=" showIconDialog = true"
       >
         <div class="group-hover:c-purple-500 group-hover:opacity-35 i-carbon:add opacity-20 text-3xl transition-all-300"/>

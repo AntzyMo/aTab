@@ -24,8 +24,8 @@
 
 <template>
   <div
-    class="b-base px2 py-1 rounded transition-all"
-    border="1 solid"
+    class="px2 py-1 rounded transition-all"
+    border="1 solid b-base"
     flex="~ 1 items-center"
     :class="outsideClass"
   >

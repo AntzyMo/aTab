@@ -24,8 +24,8 @@
 
 <template>
   <div
-    class="b-base max-w-600px px4 rounded-10px transition-all w-full"
-    border="1 solid"
+    class="max-w-600px px4 rounded-10px transition-all w-full"
+    border="1 solid b-base"
     flex="~ 1  col"
   >
     <div
@@ -49,9 +49,9 @@
 
     <div
       :class="{ '!h-0 !p-0 !b-none': !searchValue }"
-      class="b-base gap-y-2 h-250px overflow-hidden py-2 transition-all-300"
+      class="gap-y-2 h-250px overflow-hidden py-2 transition-all-300"
       flex="~ col"
-      border-t="1 solid"
+      border-t="1 solid b-base"
     >
       <div
         v-for="(item, index) in 6"

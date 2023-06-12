@@ -11,9 +11,9 @@
 <template>
   <a flex="~ col items-center" class="cursor-pointer group">
     <div
-      class="b-base h-14 mb-2 rounded-xl w-14"
+      class="h-14 mb-2 rounded-xl w-14"
       flex="~ justify-center items-center"
-      border="1 solid"
+      border="1 solid b-base"
     >
       <Icon :icon="icon" class="opacity-60 text-10"/>
     </div>

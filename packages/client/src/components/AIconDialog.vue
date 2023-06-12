@@ -57,6 +57,7 @@
   }
 
   async function fetchIcon() {
+    validateUrl()
     if (validate.url) return
 
     const { url } = icon
@@ -111,7 +112,7 @@
         <div>
           <AInput
             v-model="icon.url"
-            :outside-class="{ 'border-color-orange border-opacity-40': validate.url }"
+            :outside-class="{ 'border-color-orange/40': validate.url }"
             placeholder="The URL..."
             icon="i-carbon:content-delivery-network"
             @blur="fetchIcon"
@@ -119,15 +120,15 @@
         </div>
         <AInput
           v-model="icon.name"
-          :outside-class="{ 'border-color-orange border-opacity-40': validate.name }"
+          :outside-class="{ 'border-color-orange/40': validate.name }"
           placeholder="The Name..."
           icon="i-carbon:text-align-center"
-          @blur="validateName()"
+          @blur="validateName"
         />
       </div>
     </div>
     <div flex="~ justify-end">
-      <AButton class="border-opacity-0 hover:!c-white hover:border-color-transparent hover:opacity-80 mr-1 opacity-30" @click="close">
+      <AButton class="border-opacity-0 hover:!border-color-transparent hover:!c-white hover:opacity-80 mr-1 opacity-30" @click="close">
         close
       </AButton>
       <AButton @click="submit">
@@ -138,17 +139,17 @@
     <div
       v-show="icons.length"
       flex="~ col 1"
-      class="b-base mt-2"
-      border="1 solid"
+      class="mt-2"
+      border="1 solid b-base"
     >
       <div flex="~">
         <button
-          class="b-base b-none bg-transparent px-4 py-2"
-          border-r="1 solid"
+          class="b-none bg-transparent px-4 py-2"
+          border-r="1 solid b-base"
         >
           Icons
         </button>
-        <div class="b-base" flex="~ 1" border-b="1 solid"/>
+        <div class="" flex="~ 1" border-b="1 solid b-base"/>
       </div>
 
       <div class="col gap-8px max-h-40 overflow-hidden overflow-y-auto p-1 select-none" flex="~ wrap 1">
@@ -157,7 +158,7 @@
           :key="item"
           :class="{ 'icons-item-active': index === iconActiveIdx }"
           border="1 solid transparent"
-          class="b-base group hover:border-color-#32967266 p-1.5 rounded text-2"
+          class="group hover:border-color-#32967266 p-1.5 rounded text-2"
           @click="selectIcon(item, index)"
         >
           <Icon
