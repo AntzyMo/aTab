@@ -26,7 +26,7 @@ function vDebounceFn(binding: DirectiveBinding, vnode: VNode) {
   // 绑定事件
   const onEvent = (event: string) => {
     const eventUpperCase = event.startsWith('on') ? event : `on${event.replace(/^\S/, s => s.toUpperCase())}`
-    const fn = props![eventUpperCase]
+    const fn = Array.isArray(props![eventUpperCase]) ? props![eventUpperCase][0] : props![eventUpperCase]
     const delay = binding?.arg || 100
     vnode.props![eventUpperCase] = debounce(fn, +delay)
   }
@@ -43,6 +43,7 @@ function vDebounceFn(binding: DirectiveBinding, vnode: VNode) {
 
 const vDebounce: Directive = {
   created(el, binding, vnode) {
+    console.log('vnode', vnode)
     vDebounceFn(binding, vnode)
   },
   beforeUpdate(el, binding, vnode) {

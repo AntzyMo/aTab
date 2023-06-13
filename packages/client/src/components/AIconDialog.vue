@@ -3,7 +3,6 @@
   import { inject, reactive, ref, watch } from 'vue'
   import type { IconType } from '@/types'
 
-  import { vDebounce } from '@/directives'
   import { tabsKey } from '@/shared/provideKey'
 
   const props = defineProps<{
@@ -87,7 +86,7 @@
   async function searchIcon(e: Event) {
     const value = (e.target as HTMLInputElement).value
     console.log('value', value)
-    // await fetchIconApi(value)
+    await fetchIconApi(value)
   }
 
   function selectIcon(item: string, index: number) {
@@ -175,13 +174,14 @@
       </div>
 
       <div class="max-h-40 min-h-40 p-1 select-none" flex="~ col">
-        <AInput
-          v-debounce
-          :value="iconKeyWord"
-          outside-class="!border-color-transparent bg-dark m-1 mb-3"
-          placeholder="Search Icon..."
-          @input="searchIcon"
-        />
+        <div>
+          <AInput
+            v-model="iconKeyWord"
+            outside-class="!border-color-transparent bg-dark m-1 mb-3"
+            placeholder="Search Icon..."
+            @input="searchIcon"
+          />
+        </div>
         <div flex="~ col 1" class="overflow-hidden overflow-y-auto">
           <div v-if="icons.length" gap-8px flex="~ wrap">
             <div

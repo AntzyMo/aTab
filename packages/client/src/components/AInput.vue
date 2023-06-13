@@ -26,14 +26,14 @@
   <div
     class="px2 py-1 rounded transition-all"
     border="1 solid b-base"
-    flex="~ items-center"
+    flex="~ 1 items-center"
     :class="outsideClass"
   >
     <div :class="icon" class="opacity-60 text-base"/>
     <input
       v-bind="$attrs"
       :value="modelValue"
-      class="bg-transparent flex-1 font-sans h-full opacity-85 outline-none px-2 w-full"
+      class="bg-transparent flex-1 font-sans opacity-85 outline-none px-2"
       border="1 solid transparent"
       :placeholder="placeholder"
       autofocus
