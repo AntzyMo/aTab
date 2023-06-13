@@ -20,6 +20,9 @@
   function search() {
     console.log(searchValue.value)
   }
+  function clear() {
+    searchValue.value = ''
+  }
 </script>
 
 <template>
@@ -44,7 +47,7 @@
         @keydown.up="keywordUp"
         @input="search"
       >
-      <div v-show="searchValue" class="cursor-pointer  hover:opacity-80  i-carbon:close  opacity-60  text-2xl"/>
+      <div v-show="searchValue" class="cursor-pointer  hover:opacity-80  i-carbon:close  opacity-60  text-2xl" @click="clear"/>
     </div>
 
     <div

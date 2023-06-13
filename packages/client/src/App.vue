@@ -18,9 +18,9 @@
       <ADark/>
     </header>
 
-    <main flex="~ col items-center">
-      <ASearch class="mb10"/>
-      <Tab/>
+    <main flex="~ col items-center" class="relative">
+      <ASearch class="absolute backdrop-blur-10px z-1"/>
+      <Tab class="mt-20"/>
     </main>
   </div>
 </template>
