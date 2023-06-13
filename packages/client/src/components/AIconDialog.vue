@@ -1,18 +1,19 @@
 <script setup lang="ts">
-  import { inject, reactive, ref } from 'vue'
   import { Icon, disableCache } from '@iconify/vue'
+  import { inject, reactive, ref, watch } from 'vue'
   import type { IconType } from '@/types'
 
+  import { vDebounce } from '@/directives'
   import { tabsKey } from '@/shared/provideKey'
 
-  defineProps<Props>()
-  const emit = defineEmits(['update:modelValue', 'submit'])
+  const props = defineProps<{
+    modelValue: boolean
+    data: IconType
+  }>()
+  const emit = defineEmits(['update:modelValue', 'submit', 'close'])
   disableCache('all')
 
-  interface Props {
-    modelValue: boolean
-  }
-
+  const iconKeyWord = ref('')
   const icons = ref([])
   const iconActiveIdx = ref(0)
   const tabs = inject(tabsKey)
@@ -25,6 +26,15 @@
     url: '',
     name: '',
     logo: ''
+  })
+
+  watch(() => props.data, (data: IconType) => {
+    if (data) {
+      Object.assign(icon, data)
+      fetchIcon()
+    }
+  }, {
+    immediate: true
   })
 
   // 获取二级域名
@@ -61,12 +71,23 @@
     if (validate.url) return
 
     const { url } = icon
-    icon.name = getSLD(url)
-    const res = await fetch(`https://api.iconify.design/search?query=${icon.name}`)
-    const data = await res.json()
+    icon.name = iconKeyWord.value = getSLD(url)
 
+    const data = await fetchIconApi(icon.name)
     icon.logo = data.icons[0]
+  }
+
+  async function fetchIconApi(keyword: string) {
+    const res = await fetch(`https://api.iconify.design/search?query=${keyword}`)
+    const data = await res.json()
     icons.value = data.icons
+    return data
+  }
+
+  async function searchIcon(e: Event) {
+    const value = (e.target as HTMLInputElement).value
+    console.log('value', value)
+    // await fetchIconApi(value)
   }
 
   function selectIcon(item: string, index: number) {
@@ -81,6 +102,7 @@
 
   function close() {
     emit('update:modelValue', false)
+    emit('close')
     clearEffect(icon)
     clearEffect(validate)
     icons.value = []
@@ -99,7 +121,7 @@
 </script>
 
 <template>
-  <div v-if="modelValue" class="absolute box-border left-65% n-dialog p-3 rounded shadow-xl top-45% w-300px z-999">
+  <div v-if="modelValue" v-bind="$attrs" class="box-border n-dialog p-3 rounded shadow-xl w-300px z-999">
     <div v-if="validate.url || validate.name" class="c-orange/60 flex text-1 translate-x-56px">
       <p class="scale-80">
         {{ validate.url || validate.name }}
@@ -107,7 +129,7 @@
     </div>
     <div flex="~ items-start">
       <div class="mr-2 w-58px">
-        <ASiteBlock :icon="icon.logo" :name="icon.name"/>
+        <ASiteBlock :data="icon"/>
       </div>
       <div class="gap-5px" flex="~ col 1">
         <div>
@@ -138,7 +160,6 @@
     </div>
 
     <div
-      v-show="icons.length"
       flex="~ col 1"
       class="mt-2"
       border="1 solid b-base"
@@ -153,20 +174,35 @@
         <div class="" flex="~ 1" border-b="1 solid b-base"/>
       </div>
 
-      <div class="col gap-8px max-h-40 overflow-hidden overflow-y-auto p-1 select-none" flex="~ wrap 1">
-        <div
-          v-for="(item, index) in icons"
-          :key="item"
-          :class="{ 'icons-item-active': index === iconActiveIdx }"
-          border="1 solid transparent"
-          class="group hover:border-color-#32967266 p-1.5 rounded text-2"
-          @click="selectIcon(item, index)"
-        >
-          <Icon
-            :icon="item"
-            :inline="true"
-            class="group-hover:c-#3ec795 icon opacity-60 text-xl"
-          />
+      <div class="max-h-40 min-h-40 p-1 select-none" flex="~ col">
+        <AInput
+          v-debounce
+          :value="iconKeyWord"
+          outside-class="!border-color-transparent bg-dark m-1 mb-3"
+          placeholder="Search Icon..."
+          @input="searchIcon"
+        />
+        <div flex="~ col 1" class="overflow-hidden overflow-y-auto">
+          <div v-if="icons.length" gap-8px flex="~ wrap">
+            <div
+              v-for="(item, index) in icons"
+              :key="item"
+              :class="{ 'icons-item-active': index === iconActiveIdx }"
+              border="1 solid transparent"
+              class="group hover:border-color-#32967266 p-1.5 rounded text-2"
+              @click="selectIcon(item, index)"
+            >
+              <Icon
+                :icon="item"
+                :inline="true"
+                class="group-hover:c-#3ec795 icon opacity-60 text-xl"
+              />
+            </div>
+          </div>
+          <div v-else flex="~ 1 col justify-center items-center">
+            <div class="i-carbon:magnify mb-1 opacity-20 text-8"/>
+            <span class="opacity-20 text-12px">No Data</span>
+          </div>
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@
       <input
         v-model="searchValue"
         v-debounce="'input'"
-        class="bg-transparent font-sans h-full opacity-85 outline-none px3 text-lg w-full"
+        class="bg-transparent  font-sans  h-full  opacity-85  outline-none  px3  text-lg  w-full"
         border="1 solid transparent"
         placeholder="Search..."
         autofocus

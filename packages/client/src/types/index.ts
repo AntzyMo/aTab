@@ -3,3 +3,8 @@ export interface IconType {
   name: string
   logo: string
 }
+
+export interface Tab {
+  data: IconType
+  show: boolean
+}

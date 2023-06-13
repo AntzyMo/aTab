@@ -26,7 +26,7 @@
   <div
     class="px2 py-1 rounded transition-all"
     border="1 solid b-base"
-    flex="~ 1 items-center"
+    flex="~ items-center"
     :class="outsideClass"
   >
     <div :class="icon" class="opacity-60 text-base"/>
