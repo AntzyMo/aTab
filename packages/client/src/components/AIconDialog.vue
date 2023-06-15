@@ -7,14 +7,14 @@
 
   const props = defineProps<{
     modelValue: boolean
-    data: IconType
+    data: IconType | null
   }>()
-  const emit = defineEmits(['update:modelValue', 'submit', 'close'])
+
+  const emit = defineEmits(['update:modelValue', 'submit', 'close', 'delete'])
   disableCache('all')
 
-  const iconKeyWord = ref('')
   const icons = ref([])
-  const iconActiveIdx = ref(0)
+  const iconActiveIdx = ref(-1)
   const tabs = inject(tabsKey)
 
   const validate = reactive({
@@ -24,16 +24,17 @@
   const icon = reactive<IconType>({
     url: '',
     name: '',
-    logo: ''
+    logo: '',
+    searchIconName: ''
   })
 
-  watch(() => props.data, (data: IconType) => {
-    if (data) {
+  watch(() => props.modelValue, (isTrue: boolean) => {
+    const { data } = props
+
+    if (isTrue && data) {
       Object.assign(icon, data)
       fetchIcon()
     }
-  }, {
-    immediate: true
   })
 
   // 获取二级域名
@@ -70,22 +71,25 @@
     if (validate.url) return
 
     const { url } = icon
-    icon.name = iconKeyWord.value = getSLD(url)
+    if (!icon.searchIconName) icon.searchIconName = getSLD(url)
+    if (!icon.name) icon.name = icon.searchIconName
 
-    const data = await fetchIconApi(icon.name)
-    icon.logo = data.icons[0]
+    const data = await fetchIconApi(icon.searchIconName)
+
+    if (!icon.logo) icon.logo = data.icons[0]
+
+    iconActiveIdx.value = data.icons.findIndex((item: string) => item === icon.logo)
   }
 
   async function fetchIconApi(keyword: string) {
     const res = await fetch(`https://api.iconify.design/search?query=${keyword}`)
     const data = await res.json()
-    icons.value = data.icons
+    icons.value = data?.icons || []
     return data
   }
 
   async function searchIcon(e: Event) {
     const value = (e.target as HTMLInputElement).value
-    console.log('value', value)
     await fetchIconApi(value)
   }
 
@@ -100,8 +104,8 @@
   }
 
   function close() {
-    emit('update:modelValue', false)
     emit('close')
+    emit('update:modelValue', false)
     clearEffect(icon)
     clearEffect(validate)
     icons.value = []
@@ -150,8 +154,8 @@
       </div>
     </div>
     <div flex="~ justify-end">
-      <AButton class="border-opacity-0 hover:!border-color-transparent hover:!c-white hover:opacity-80 mr-1 opacity-30" @click="close">
-        close
+      <AButton v-if="data" class="border-opacity-0 hover:!border-color-transparent hover:!c-white hover:opacity-80 mr-1 opacity-30" @click="$emit('delete')">
+        delete
       </AButton>
       <AButton @click="submit">
         submit
@@ -176,7 +180,7 @@
       <div class="max-h-40 min-h-40 p-1 select-none" flex="~ col">
         <div>
           <AInput
-            v-model="iconKeyWord"
+            v-model=" icon.searchIconName"
             outside-class="!border-color-transparent bg-dark m-1 mb-3"
             placeholder="Search Icon..."
             @input="searchIcon"
@@ -206,6 +210,7 @@
         </div>
       </div>
     </div>
+    <div class="-z-1 fixed po-xy" @click="close"/>
   </div>
 </template>
 

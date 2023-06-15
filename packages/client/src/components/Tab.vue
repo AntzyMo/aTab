@@ -1,20 +1,11 @@
 <script setup lang="ts">
-  import { inject, ref } from 'vue'
+  import { ref } from 'vue'
   import type { IconType } from '@/types'
 
-  import { tabsKey } from '@/shared/provideKey'
+  import useTabs from '@/hooks/useTabs'
 
-  const tabsStore = inject(tabsKey)
   const addIconActive = ref(false)
-
-  const tabs = ref(tabsStore!.value.map(item => ({
-    data: item,
-    show: false
-  })))
-
-  function saveTab(data: IconType) {
-    tabsStore?.value.push(data)
-  }
+  const { tabs, addTab, updateTab, triggerIconDialog, deleteTab } = useTabs()
 </script>
 
 <template>
@@ -27,14 +18,15 @@
       <ASiteBlock
         :data="tab.data"
         el="a"
-        @click.prevent.right="tab.show = true"
+        @click.prevent.right="triggerIconDialog(tab)"
       />
       <AIconDialog
         v-model="tab.show"
         :data="tab.data"
         class="absolute left-62px top-45px"
-        @submit="saveTab"
-        @close="addIconActive = false"
+        @submit="(data:IconType) => updateTab(data, index)"
+        @close="triggerIconDialog(tab)"
+        @delete="deleteTab(index)"
       />
     </div>
     <div class="relative">
@@ -50,7 +42,7 @@
       <AIconDialog
         v-model="addIconActive"
         class="absolute left-62px top-45px"
-        @submit="saveTab"
+        @submit="addTab"
         @close="addIconActive = false"
       />
     </div>

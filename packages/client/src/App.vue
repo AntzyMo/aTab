@@ -10,7 +10,13 @@
 </script>
 
 <template>
-  <div p-3 font-sans>
+  <div
+    p-3
+    font-sans
+    h-100vh
+    box-border
+    @click.prevent.right
+  >
     <header
       class="mb30"
       flex="~ justify-end"
