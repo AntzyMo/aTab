@@ -11,12 +11,10 @@
 
 <template>
   <div
-    p-3
-    font-sans
-    h-100vh
-    box-border
+    class="box-border  font-sans  h-100vh  p-3"
     @click.prevent.right
   >
+    <APlum/>
     <header
       class="mb30"
       flex="~ justify-end"
@@ -25,7 +23,7 @@
     </header>
 
     <main flex="~ col items-center" class="relative">
-      <ASearch class="absolute backdrop-blur-10px z-1"/>
+      <ASearch class="absolute  z-1"/>
       <Tab class="mt-20"/>
     </main>
   </div>

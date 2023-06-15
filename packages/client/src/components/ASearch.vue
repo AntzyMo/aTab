@@ -27,12 +27,12 @@
 
 <template>
   <div
-    class="max-w-600px px4 rounded-10px transition-all w-full"
+    class="max-w-650px  overflow-hidden  rounded-10px  transition-all  w-full"
     border="1 solid b-base"
     flex="~ 1  col"
   >
     <div
-      class="h-46px"
+      class="h-46px  mx-4"
       flex="~  items-center"
     >
       <div class="i-carbon:search opacity-60 text-2xl"/>
@@ -52,7 +52,7 @@
 
     <div
       :class="{ '!h-0 !p-0 !b-none': !searchValue }"
-      class="gap-y-2 h-250px overflow-hidden py-2 transition-all-300"
+      class="backdrop-blur-10px gap-y-2 h-250px overflow-hidden px-4 py-2 transition-all-300"
       flex="~ col"
       border-t="1 solid b-base"
     >

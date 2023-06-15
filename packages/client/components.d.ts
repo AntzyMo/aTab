@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     ADark: typeof import('./src/components/ADark.vue')['default']
     AIconDialog: typeof import('./src/components/AIconDialog.vue')['default']
     AInput: typeof import('./src/components/AInput.vue')['default']
+    APlum: typeof import('./src/components/APlum.vue')['default']
     ASearch: typeof import('./src/components/ASearch.vue')['default']
     ASiteBlock: typeof import('./src/components/ASiteBlock.vue')['default']
     ATab: typeof import('./src/components/ATab.vue')['default']
