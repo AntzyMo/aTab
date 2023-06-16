@@ -25,6 +25,6 @@
     >
       <Icon :icon="data.logo" class="group-hover:opacity-70 opacity-60 text-10 transition-opacity-80"/>
     </div>
-    <span class="group-hover:opacity-70  min-h-6  opacity-60  overflow-hidden  select-none  text-center  text-ellipsis  text-nowrap  transition-opacity-300  w-full">{{ data.name }}</span>
+    <span class="group-hover:opacity-70  min-h-6  opacity-60  overflow-hidden  select-none  text-14px  text-center  text-ellipsis  text-nowrap  transition-opacity-300  w-full">{{ data.name }}</span>
   </component>
 </template>
