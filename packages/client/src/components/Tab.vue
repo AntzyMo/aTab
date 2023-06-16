@@ -32,12 +32,12 @@
     <div class="relative">
       <div
         :class="{ 'addIcon-active': addIconActive }"
-        class="cursor-pointer  group  h-14  hover:b-color-purple-500/40  mb-2  rounded-xl  transition-all-300  w-14"
+        class="cursor-pointer dark:hover:b-color-purple-500/40 group h-14 hover:b-color-purple-500/60 mb-2 rounded-xl transition-all-300 w-14"
         flex="~ justify-center items-center"
         border="1 dashed b-base"
         @click="addIconActive = true"
       >
-        <div class="group-hover:c-purple-500 group-hover:opacity-35 i-carbon:add opacity-20 text-3xl transition-all-300"/>
+        <div class="dark:group-hover:opacity-35 group-hover:c-purple-500 group-hover:opacity-55 i-carbon:add opacity-20 text-3xl transition-all-300"/>
       </div>
       <AIconDialog
         v-model="addIconActive"
@@ -51,6 +51,13 @@
 
 <style lang="scss" scoped>
 .addIcon-active{
+  border-color:#a855f799;
+  div{
+    color: rgba(168, 85, 247);
+      opacity: .55;
+  }
+}
+.dark .addIcon-active{
   border-color:#a855f766;
   div{
       color: rgba(168, 85, 247);

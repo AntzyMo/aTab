@@ -125,20 +125,20 @@
 
 <template>
   <div v-if="modelValue" v-bind="$attrs" class="box-border n-dialog p-3 rounded shadow-xl w-300px z-999">
-    <div v-if="validate.url || validate.name" class="c-orange/60 flex text-1 translate-x-56px">
+    <div v-if="validate.url || validate.name" class="c-orange dark:c-orange/60 flex text-1 translate-x-56px">
       <p class="scale-80">
         {{ validate.url || validate.name }}
       </p>
     </div>
     <div flex="~ items-start">
       <div class="mr-2 w-58px">
-        <ASiteBlock :data="icon"/>
+        <ASiteBlock :data="icon" border="1 solid b-base"/>
       </div>
       <div class="gap-5px" flex="~ col 1">
         <div>
           <AInput
             v-model="icon.url"
-            :outside-class="{ '!border-color-orange/40': validate.url }"
+            :outside-class="{ '!border-color-orange dark:!border-color-orange/40': validate.url }"
             placeholder="The URL..."
             icon="i-carbon:content-delivery-network"
             @blur="fetchIcon"
@@ -146,7 +146,7 @@
         </div>
         <AInput
           v-model="icon.name"
-          :outside-class="{ '!border-color-orange/40': validate.name }"
+          :outside-class="{ '!border-color-orange dark:!border-color-orange/40': validate.name }"
           placeholder="The Name..."
           icon="i-carbon:text-align-center"
           @blur="validateName"
@@ -154,10 +154,10 @@
       </div>
     </div>
     <div flex="~ justify-end">
-      <AButton v-if="data" class="border-opacity-0 hover:!border-color-transparent hover:!c-white hover:opacity-80 mr-1 opacity-30" @click="$emit('delete')">
+      <AButton v-if="data" class="border-opacity-0  dark:hover:!c-white  dark:hover:opacity-80  hover:!border-color-transparent  hover:opacity-60  mr-1  opacity-30" @click="$emit('delete')">
         delete
       </AButton>
-      <AButton @click="submit">
+      <AButton class="dark:hover:border-color-green/60 dark:hover:c-green/80 dark:opacity-80 hover:border-color-green-700/60 hover:c-green-700" @click="submit">
         submit
       </AButton>
     </div>
@@ -181,7 +181,7 @@
         <div>
           <AInput
             v-model=" icon.searchIconName"
-            outside-class="!border-color-transparent bg-dark m-1 mb-3"
+            outside-class="!border-color-transparent bg-light-700 dark:bg-dark m-1 mb-3"
             placeholder="Search Icon..."
             @input="searchIcon"
           />
@@ -193,13 +193,13 @@
               :key="item"
               :class="{ 'icons-item-active': index === iconActiveIdx }"
               border="1 solid transparent"
-              class="group hover:border-color-#32967266 p-1.5 rounded text-2"
+              class="dark:hover:border-color-#32967266 group hover:border-color-green-700/60 p-1.5 rounded text-2"
               @click="selectIcon(item, index)"
             >
               <Icon
                 :icon="item"
                 :inline="true"
-                class="group-hover:c-#3ec795 icon opacity-60 text-xl"
+                class="dark:group-hover:c-#3ec795 dark:opacity-60 group-hover:c-green-700 icon opacity-70 text-xl"
               />
             </div>
           </div>
@@ -216,6 +216,12 @@
 
 <style lang="scss" scoped>
 .icons-item-active{
+  border-color: rgba(21, 128, 61, 0.6);
+  .icon{
+      color: rgb(21, 128, 61);
+    }
+}
+.dark .icons-item-active{
   border-color: #32967266;
   .icon{
       color: #3ec795;

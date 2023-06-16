@@ -8,6 +8,9 @@
   }>(), {
     el: 'div'
   })
+  defineOptions({
+    inheritAttrs: false
+  })
 </script>
 
 <template>
@@ -18,9 +21,9 @@
     :href="data.url"
   >
     <div
-      class="group-hover:border-color-light/20 h-14 mb-2 rounded-xl transition-border-color-300 w-14"
+      class="h-14 mb-2 rounded-xl w-14"
       flex="~ justify-center items-center"
-      border="1 solid b-base"
+      v-bind="$attrs"
     >
       <Icon :icon="data.logo" class="group-hover:opacity-70 opacity-60 text-10 transition-opacity-80"/>
     </div>
