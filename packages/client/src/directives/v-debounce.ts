@@ -43,7 +43,6 @@ function vDebounceFn(binding: DirectiveBinding, vnode: VNode) {
 
 const vDebounce: Directive = {
   created(el, binding, vnode) {
-    console.log('vnode', vnode)
     vDebounceFn(binding, vnode)
   },
   beforeUpdate(el, binding, vnode) {

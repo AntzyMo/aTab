@@ -16,7 +16,6 @@
     flex="~ col items-center"
     class="cursor-pointer group"
     :href="data.url"
-    :class="{ 'c-inherit decoration-none': el === 'a' }"
   >
     <div
       class="group-hover:border-color-light/20 h-14 mb-2 rounded-xl transition-border-color-300 w-14"
