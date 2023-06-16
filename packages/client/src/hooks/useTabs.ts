@@ -1,4 +1,4 @@
-import { inject, shallowRef, triggerRef, watch } from 'vue'
+import { inject, onMounted, shallowRef, triggerRef, watch } from 'vue'
 import type { IconType, Tab } from '@/types'
 
 import { tabsKey } from '@/shared/provideKey'
@@ -12,10 +12,28 @@ function createTabs(tabs: IconType[]) {
 
 export default () => {
   const tabsStore = inject(tabsKey)!
+
   const tabs = shallowRef<Tab[]>(createTabs(tabsStore.value))
 
   watch(tabsStore, val => {
     tabs.value = createTabs(val)
+
+    if (import.meta.env.PROD) {
+      chrome.storage.sync.set({ tabs: val })
+    }
+  })
+
+  onMounted(async () => {
+    if (import.meta.env.PROD) {
+      const { tabs } = await chrome.storage.sync.get(['tabs'])
+      if (tabs.length) {
+        if (!('searchIconName' in tabs[0])) {
+          chrome.storage.sync.clear()
+        } else {
+          tabsStore.value = tabs
+        }
+      }
+    }
   })
 
   const triggerIconDialog = (tab: Tab) => {

@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
+    "@types/chrome": "^0.0.237",
     "@types/node": "^18.16.8",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/tsconfig": "^0.4.0",
