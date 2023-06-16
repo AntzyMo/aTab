@@ -115,8 +115,8 @@
     validateUrl()
     validateName()
 
-    const isValidate = Object.values(validate).every(() => Boolean)
-    if (isValidate) {
+    const isValidate = Object.values(validate).some(Boolean)
+    if (!isValidate) {
       emit('submit', { ...icon })
       close()
     }
