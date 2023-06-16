@@ -11,7 +11,7 @@
 
 <template>
   <div
-    class="box-border  font-sans  h-100vh  p-3"
+    class="box-border  font-sans  h-100vh  p-6"
     @click.prevent.right
   >
     <APlum/>

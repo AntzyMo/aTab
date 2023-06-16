@@ -144,9 +144,8 @@
 
 <template>
   <div
-    class="fixed po-xy pointer-events-none"
-    style="z-index: -1"
-    :style="`mask-image: ${mask};--webkit-mask-image: ${mask};`"
+    class="-z-1 fixed po-xy pointer-events-none"
+    :style="{ 'mask-image': mask }"
   >
     <canvas ref="el" width="400" height="400"/>
   </div>
