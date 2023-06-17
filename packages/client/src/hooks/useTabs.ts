@@ -28,7 +28,7 @@ export default () => {
   onMounted(async () => {
     if (isExtension) {
       const { tabs } = await chrome.storage.sync.get(['tabs'])
-      if (tabs.length) {
+      if (tabs?.length) {
         if (!('searchIconName' in tabs[0])) {
           chrome.storage.sync.clear()
         } else {
