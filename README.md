@@ -2,6 +2,7 @@
   aTab new tab page
 </p>
 This is a simple and ad-free new tab extension.
+<a href='https://chrome.google.com/webstore/detail/atab%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/homiplcificknmahchnfnegkagbpecgi/related?hl=zh-CN' target="_blank">come in</a>
 <br/>
 <br/>
 

@@ -1,7 +1,8 @@
 <p align=center>
   aTab 新标签页
 </p>
-这是一款操作简单且无广告的简约新标签页
+这是一款操作简单且无广告的简约新标签页 
+<a href='https://chrome.google.com/webstore/detail/atab%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/homiplcificknmahchnfnegkagbpecgi/related?hl=zh-CN' target="_blank">立即体验</a>
 <br/>
 <br/>
 
