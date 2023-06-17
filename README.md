@@ -1,4 +1,11 @@
 <p align=center>
+  aTab new tab page
+</p>
+This is a simple and ad-free new tab extension.
+<br/>
+<br/>
+
+<p align=center>
   <a href="https://github.com/AntzyMo/aTab"><img src="./aTab-v2.png"/></a>
 </p>
 
@@ -6,7 +13,6 @@
   <br> English | <a href="README-CN.md">中文</a>
 </p>
 
-This is a simple and ad-free new tab extension.
 
 - Supports dark mode
 - Uses `chrome` account for cloud synchronization by default
