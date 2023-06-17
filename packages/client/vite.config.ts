@@ -1,19 +1,40 @@
+import fs from 'fs-extra'
 import UnoCSS from 'unocss/vite'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { URL, fileURLToPath } from 'node:url'
 import Components from 'unplugin-vue-components/vite'
+import type { PluginOption } from 'vite'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? './' : '/',
-  plugins: [vue(), UnoCSS(), Components()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+export default defineConfig(config => {
+  const { mode } = config
+  const isExtension = mode === 'extension'
+  return {
+    base: isExtension ? './' : '/',
+    plugins: [vue(), UnoCSS(), Components(), clearDist()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    build: {
+      outDir: isExtension ? '../chrome/dist' : 'dist',
+      emptyOutDir: false
     }
-  },
-  build: {
-    outDir: '../chrome/dist'
+  } })
+
+function clearDist(): PluginOption {
+  return {
+    name: 'clearDist',
+    apply(config, { mode }) {
+      return mode === 'extension'
+    },
+    buildEnd() {
+      console.log(11)
+      console.log('__dirname', __dirname)
+      fs.remove(resolve(__dirname, '../chrome/dist'))
+    }
   }
-}))
+}
