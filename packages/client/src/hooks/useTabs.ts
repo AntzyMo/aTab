@@ -15,16 +15,18 @@ export default () => {
 
   const tabs = shallowRef<Tab[]>(createTabs(tabsStore.value))
 
+  const isExtension = import.meta.env.MODE === 'extension'
+
   watch(tabsStore, val => {
     tabs.value = createTabs(val)
 
-    if (import.meta.env.PROD) {
+    if (isExtension) {
       chrome.storage.sync.set({ tabs: val })
     }
   })
 
   onMounted(async () => {
-    if (import.meta.env.PROD) {
+    if (isExtension) {
       const { tabs } = await chrome.storage.sync.get(['tabs'])
       if (tabs.length) {
         if (!('searchIconName' in tabs[0])) {
