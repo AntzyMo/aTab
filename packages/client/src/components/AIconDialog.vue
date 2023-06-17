@@ -12,7 +12,7 @@
   }>()
   const emit = defineEmits(['update:modelValue', 'submit', 'close', 'delete'])
 
-  const [DefineFetchedTemplate, ReuseFetchedTemplate] = createReusableTemplate<{ icon: string; text: string }>()
+  const [DefineFetchedTemplate, ReuseFetchedTemplate] = createReusableTemplate<{ ico: string; text: string }>()
   disableCache('all')
 
   const isLoading = ref(false)
