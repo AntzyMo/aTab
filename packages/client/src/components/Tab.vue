@@ -36,6 +36,7 @@
         flex="~ justify-center items-center"
         border="1 dashed b-base"
         @click="addIconActive = true"
+        @click.prevent.right="addIconActive = true"
       >
         <div class="dark:group-hover:opacity-35 group-hover:c-purple-500 group-hover:opacity-55 i-carbon:add opacity-20 text-3xl transition-all-300"/>
       </div>

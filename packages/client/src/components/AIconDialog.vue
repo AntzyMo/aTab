@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Icon, disableCache } from '@iconify/vue'
   import { inject, reactive, ref, watch } from 'vue'
+  import { createReusableTemplate } from '@vueuse/core'
   import type { IconType } from '@/types'
 
   import { tabsKey } from '@/shared/provideKey'
@@ -9,10 +10,12 @@
     modelValue: boolean
     data: IconType | null
   }>()
-
   const emit = defineEmits(['update:modelValue', 'submit', 'close', 'delete'])
+
+  const [DefineFetchedTemplate, ReuseFetchedTemplate] = createReusableTemplate<{ icon: string; text: string }>()
   disableCache('all')
 
+  const isLoading = ref(false)
   const icons = ref([])
   const iconActiveIdx = ref(-1)
   const tabs = inject(tabsKey)
@@ -59,7 +62,7 @@
 
     if (!name.trim()) {
       validate.name = 'Name can\'t be blank'
-    } else if (tabs!.value.some(tab => tab.name === name)) {
+    } else if (tabs!.value.some(tab => tab.name === name) && !props.data) {
       validate.name = 'name already exists'
     } else {
       validate.name = ''
@@ -71,20 +74,25 @@
     if (validate.url) return
 
     const { url } = icon
-    if (!icon.searchIconName) icon.searchIconName = getSLD(url)
-    if (!icon.name) icon.name = icon.searchIconName
+    const isAddOrUpate = !props.data || props.data.url !== url
+
+    if (isAddOrUpate) {
+      icon.searchIconName = icon.name = getSLD(url)
+    }
 
     const data = await fetchIconApi(icon.searchIconName)
 
-    if (!icon.logo) icon.logo = data.icons[0]
+    if (isAddOrUpate) icon.logo = data?.icons[0] || ''
 
-    iconActiveIdx.value = data.icons.findIndex((item: string) => item === icon.logo)
+    iconActiveIdx.value = data?.icons?.findIndex((item: string) => item === icon.logo)
   }
 
   async function fetchIconApi(keyword: string) {
+    isLoading.value = true
     const res = await fetch(`https://api.iconify.design/search?query=${keyword}`)
     const data = await res.json()
     icons.value = data?.icons || []
+    isLoading.value = false
     return data
   }
 
@@ -124,6 +132,12 @@
 </script>
 
 <template>
+  <DefineFetchedTemplate v-slot="{ ico, text }">
+    <div flex="~ 1 col justify-center items-center">
+      <div :class="`${ico}`" class="mb-1 opacity-20 text-8"/>
+      <span class="opacity-20 text-12px">{{ text }}</span>
+    </div>
+  </DefineFetchedTemplate>
   <div v-if="modelValue" v-bind="$attrs" class="box-border n-dialog p-3 rounded shadow-xl w-300px z-999">
     <div v-if="validate.url || validate.name" class="c-orange dark:c-orange/60 flex text-1 translate-x-56px">
       <p class="scale-80">
@@ -187,7 +201,8 @@
           />
         </div>
         <div flex="~ col 1" class="overflow-hidden overflow-y-auto">
-          <div v-if="icons.length" gap-8px flex="~ wrap">
+          <ReuseFetchedTemplate v-if="isLoading" ico="i-svg-spinners:gooey-balls-2 " text="loading..."/>
+          <div v-else-if="icons.length" gap-8px flex="~ wrap">
             <div
               v-for="(item, index) in icons"
               :key="item"
@@ -203,14 +218,11 @@
               />
             </div>
           </div>
-          <div v-else flex="~ 1 col justify-center items-center">
-            <div class="i-carbon:magnify mb-1 opacity-20 text-8"/>
-            <span class="opacity-20 text-12px">No Data</span>
-          </div>
+          <ReuseFetchedTemplate v-else ico="i-carbon:magnify" text="No Data"/>
         </div>
       </div>
     </div>
-    <div class="-z-1 fixed po-xy" @click="close"/>
+    <div class="-z-1 fixed po-xy" @click="close" @click.prevent.right="close"/>
   </div>
 </template>
 

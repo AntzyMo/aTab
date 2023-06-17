@@ -11,7 +11,8 @@ export default defineConfig({
     presetTypography(),
     presetIcons({
       collections: {
-        carbon: () => import('@iconify-json/carbon/icons.json').then(i => i.default)
+        'carbon': () => import('@iconify-json/carbon/icons.json').then(i => i.default),
+        'svg-spinners': () => import('@iconify-json/svg-spinners/icons.json').then(i => i.default)
       }
     })
   ],
