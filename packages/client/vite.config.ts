@@ -34,7 +34,7 @@ function clearDist(): PluginOption {
     buildEnd() {
       console.log(11)
       console.log('__dirname', __dirname)
-      fs.remove(resolve(__dirname, '../chrome/dist'))
+      fs.remove(resolve(__dirname, '../chrome/dist/assets'))
     }
   }
 }
