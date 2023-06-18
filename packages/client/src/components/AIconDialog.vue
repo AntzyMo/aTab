@@ -222,7 +222,7 @@
         </div>
       </div>
     </div>
-    <div class="-z-1 fixed po-xy" @click="close" @click.prevent.right="close"/>
+    <div class="-z-1 fixed po-xy" @click.stop="close" @click.stop.prevent.right="close"/>
   </div>
 </template>
 

@@ -14,11 +14,11 @@
       v-for="(tab, index) in tabs"
       :key="index"
       class="relative"
+      @click.prevent.right="triggerIconDialog(tab)"
     >
       <ASiteBlock
         :data="tab.data"
         el="a"
-        @click.prevent.right="triggerIconDialog(tab)"
       />
       <AIconDialog
         v-model="tab.show"
