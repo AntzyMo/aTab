@@ -1,4 +1,4 @@
-import { inject, onMounted, shallowRef, triggerRef, watch } from 'vue'
+import { inject, onMounted, ref, toValue, watch } from 'vue'
 import type { IconType, Tab } from '@/types'
 
 import { tabsKey } from '@/shared/provideKey'
@@ -13,7 +13,7 @@ function createTabs(tabs: IconType[]) {
 export default () => {
   const tabsStore = inject(tabsKey)!
 
-  const tabs = shallowRef<Tab[]>(createTabs(tabsStore.value))
+  const tabs = ref<Tab[]>(createTabs(toValue(tabsStore.value)))
 
   const isExtension = import.meta.env.MODE === 'extension'
 
@@ -40,7 +40,6 @@ export default () => {
 
   const triggerIconDialog = (tab: Tab) => {
     tab.show = !tab.show
-    triggerRef(tabs)
   }
 
   const addTab = (data: IconType) => {
