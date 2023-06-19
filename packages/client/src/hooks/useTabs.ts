@@ -33,14 +33,10 @@ export default () => {
     if (isExtension) {
       const { tabs } = await chrome.storage.sync.get(['tabs'])
       console.log('tabs', tabs)
-      if (tabs?.length) {
-        if (!('searchIconName' in tabs[0])) {
-          chrome.storage.sync.clear()
-          console.log('tabs1', tabs)
-        } else {
-          tabsStore.value = tabs
-          console.log('tabs2', tabs)
-        }
+      if (tabs) {
+        tabsStore.value = Object.values(tabs)
+        console.log(Object.values(tabs), 'Object.values(tabs)')
+        console.log('tabs2', tabs)
       }
     }
   })
