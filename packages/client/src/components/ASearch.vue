@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { reactive, ref, toValue } from 'vue'
+  import { ref, toValue } from 'vue'
 
   import { vDebounce } from '@/directives'
   import { pageVisibilitychange } from '@/shared/helper'
@@ -8,12 +8,6 @@
   const keywordIdx = ref(-1)
   const keywordList = ref<{ text: string }[]>([])
   const searchInputRef = ref<HTMLInputElement | null>(null)
-
-  const pinyin = reactive({
-    start: 0,
-    end: 0,
-    flag: false
-  })
 
   function keywordDown() {
     if (!keywordList.value.length) return

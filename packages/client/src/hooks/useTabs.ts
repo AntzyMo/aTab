@@ -18,9 +18,13 @@ export default () => {
   const isExtension = import.meta.env.MODE === 'extension'
 
   watch(tabsStore, val => {
+    if (!val.length) return
+    console.log('val', val)
     tabs.value = createTabs(val)
 
     if (isExtension) {
+      console.log(val, 'valis')
+
       chrome.storage.sync.set({ tabs: val })
     }
   })
@@ -28,11 +32,14 @@ export default () => {
   onMounted(async () => {
     if (isExtension) {
       const { tabs } = await chrome.storage.sync.get(['tabs'])
+      console.log('tabs', tabs)
       if (tabs?.length) {
         if (!('searchIconName' in tabs[0])) {
           chrome.storage.sync.clear()
+          console.log('tabs1', tabs)
         } else {
           tabsStore.value = tabs
+          console.log('tabs2', tabs)
         }
       }
     }
