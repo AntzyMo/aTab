@@ -19,12 +19,9 @@ export default () => {
 
   watch(tabsStore, val => {
     if (!val.length) return
-    console.log('val', val)
     tabs.value = createTabs(val)
 
     if (isExtension) {
-      console.log(val, 'valis')
-
       chrome.storage.sync.set({ tabs: val })
     }
   })
@@ -32,11 +29,8 @@ export default () => {
   onMounted(async () => {
     if (isExtension) {
       const { tabs } = await chrome.storage.sync.get(['tabs'])
-      console.log('tabs', tabs)
       if (tabs) {
         tabsStore.value = Object.values(tabs)
-        console.log(Object.values(tabs), 'Object.values(tabs)')
-        console.log('tabs2', tabs)
       }
     }
   })
@@ -57,11 +51,16 @@ export default () => {
     tabsStore.value.splice(index, 1)
   }
 
+  const replaceChromeTabs = () => {
+    const chromeTabs = tabs.value.map(item => item.data)
+    tabsStore.value = chromeTabs
+  }
   return {
     tabs,
     addTab,
     updateTab,
     triggerIconDialog,
-    deleteTab
+    deleteTab,
+    replaceChromeTabs
   }
 }
