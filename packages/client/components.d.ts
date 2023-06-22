@@ -10,12 +10,12 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AButton: typeof import('./src/components/AButton.vue')['default']
-    ADark: typeof import('./src/components/ADark.vue')['default']
     AIconDialog: typeof import('./src/components/AIconDialog.vue')['default']
     AInput: typeof import('./src/components/AInput.vue')['default']
-    APlum: typeof import('./src/components/APlum.vue')['default']
-    ASearch: typeof import('./src/components/ASearch.vue')['default']
     ASiteBlock: typeof import('./src/components/ASiteBlock.vue')['default']
+    Header: typeof import('./src/components/Header.vue')['default']
+    Plum: typeof import('./src/components/Plum.vue')['default']
+    Search: typeof import('./src/components/Search.vue')['default']
     Tab: typeof import('./src/components/Tab.vue')['default']
   }
 }

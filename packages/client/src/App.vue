@@ -14,16 +14,16 @@
     class="box-border  font-sans  h-100vh  p-6"
     @click.prevent.right
   >
-    <APlum/>
+    <Plum/>
     <header
       class="mb30"
       flex="~ justify-end"
     >
-      <ADark/>
+      <Header/>
     </header>
 
     <main flex="~ col items-center" class="relative">
-      <ASearch class="absolute  z-1"/>
+      <Search class="absolute  z-1"/>
       <Tab class="mt-20"/>
     </main>
   </div>
