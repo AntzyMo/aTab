@@ -13,7 +13,7 @@ function createTabs(tabs: IconType[]) {
 export default () => {
   const tabsStore = inject(tabsKey)!
 
-  const tabs = ref<Tab[]>(createTabs(toValue(tabsStore.value)))
+  const tabs = ref<Tab[]>(createTabs(toValue(tabsStore)))
 
   const isExtension = import.meta.env.MODE === 'extension'
 
