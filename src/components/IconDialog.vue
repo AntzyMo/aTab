@@ -1,43 +1,44 @@
 <script setup lang="ts">
-  import { Icon, disableCache } from '@iconify/vue'
-  import { inject, reactive, ref, watch } from 'vue'
+  import { Icon } from '@iconify/vue'
   import { createReusableTemplate } from '@vueuse/core'
-  import type { IconType } from '@/types'
+  import type { IconType } from './types'
 
-  import { tabsKey } from '@/shared/provideKey'
+  import AInput from './ui/AInput.vue'
+  import AButton from './ui/AButton.vue'
+  import ASiteBlock from './ui/ASiteBlock.vue'
 
   const props = defineProps<{
-    modelValue: boolean
-    data: IconType | null
+    data?: IconType
   }>()
-  const emit = defineEmits(['update:modelValue', 'submit', 'close', 'delete'])
+  const emit = defineEmits(['submit', 'close', 'delete'])
+  const [DefineFetchedTemplate, ReuseFetchedTemplate] = createReusableTemplate<{ ico: string, text: string }>()
 
-  const [DefineFetchedTemplate, ReuseFetchedTemplate] = createReusableTemplate<{ ico: string; text: string }>()
-  disableCache('all')
+  const open = ref(false)
 
   const isLoading = ref(false)
   const icons = ref([])
   const iconActiveIdx = ref(-1)
-  const tabs = inject(tabsKey)
 
   const validate = reactive({
     url: '',
     name: ''
   })
+
+  const searchIconName = ref('')
   const icon = reactive<IconType>({
     url: '',
     name: '',
-    logo: '',
-    searchIconName: ''
+    logo: ''
   })
 
-  watch(() => props.modelValue, (isTrue: boolean) => {
-    const { data } = props
+  function openIconDialog() {
+    Object.assign(icon, props.data || {})
+    fetchIcon()
+    open.value = true
+  }
 
-    if (isTrue && data) {
-      Object.assign(icon, data)
-      fetchIcon()
-    }
+  defineExpose({
+    openIconDialog
   })
 
   // 获取二级域名
@@ -59,30 +60,25 @@
 
   function validateName() {
     const { name } = icon
-
-    if (!name.trim()) {
-      validate.name = 'Name can\'t be blank'
-    } else if (tabs!.value.some(tab => tab.name === name) && !props.data) {
-      validate.name = 'name already exists'
-    } else {
-      validate.name = ''
-    }
+    validate.name = !name ? 'Name can\'t be blank' : ''
   }
 
   async function fetchIcon() {
     validateUrl()
-    if (validate.url) return
+    if (validate.url)
+      return
 
     const { url } = icon
     const isAddOrUpate = !props.data || props.data.url !== url
 
     if (isAddOrUpate) {
-      icon.searchIconName = icon.name = getSLD(url)
+      searchIconName.value = icon.name = getSLD(url)
     }
 
-    const data = await fetchIconApi(icon.searchIconName)
+    const data = await fetchIconApi(searchIconName.value)
 
-    if (isAddOrUpate) icon.logo = data?.icons[0] || ''
+    if (isAddOrUpate)
+      icon.logo = data?.icons[0] || ''
 
     iconActiveIdx.value = data?.icons?.findIndex((item: string) => item === icon.logo)
   }
@@ -106,39 +102,36 @@
     iconActiveIdx.value = index
   }
 
-  function clearEffect(obj: object) {
+  function reset(obj: object) {
     // @ts-expect-error
     Object.keys(obj).forEach(key => obj[key] = '')
   }
 
   function close() {
     emit('close')
-    emit('update:modelValue', false)
-    clearEffect(icon)
-    clearEffect(validate)
+    reset(icon)
+    reset(validate)
     icons.value = []
   }
 
-  function submit() {
+  async function submit() {
     validateUrl()
     validateName()
 
     const isValidate = Object.values(validate).some(Boolean)
     if (!isValidate) {
-      emit('submit', { ...icon })
+      emit('submit', icon)
       close()
     }
   }
 </script>
 
 <template>
-  <DefineFetchedTemplate v-slot="{ ico, text }">
-    <div flex="~ 1 col justify-center items-center">
-      <div :class="`${ico}`" class="mb-1 opacity-20 text-8"/>
-      <span class="opacity-20 text-12px">{{ text }}</span>
-    </div>
-  </DefineFetchedTemplate>
-  <div v-if="modelValue" v-bind="$attrs" class="box-border n-dialog p-3 rounded shadow-xl w-300px z-999">
+  <div class="relative">
+    <slot />
+  </div>
+
+  <div v-if="open" v-bind="$attrs" class="box-border n-dialog p-3 rounded shadow-xl w-300px z-999">
     <div v-if="validate.url || validate.name" class="c-orange dark:c-orange/60 flex text-1 translate-x-56px">
       <p class="scale-80">
         {{ validate.url || validate.name }}
@@ -146,7 +139,7 @@
     </div>
     <div flex="~ items-start">
       <div class="mr-2 w-58px">
-        <ASiteBlock :data="icon" border="1 solid b-base"/>
+        <ASiteBlock :data="icon" border="1 solid b-base" />
       </div>
       <div class="gap-5px" flex="~ col 1">
         <div>
@@ -156,6 +149,7 @@
             placeholder="The URL..."
             icon="i-carbon:content-delivery-network"
             @blur="fetchIcon"
+            @keyup.enter="fetchIcon"
           />
         </div>
         <AInput
@@ -168,7 +162,7 @@
       </div>
     </div>
     <div flex="~ justify-end">
-      <AButton v-if="data" class="border-opacity-0  dark:hover:!c-white  dark:hover:opacity-80  hover:!border-color-transparent  hover:opacity-60  mr-1  opacity-30" @click="$emit('delete')">
+      <AButton v-if="data" class="border-opacity-0  dark:hover:!c-white  dark:hover:opacity-80  hover:!border-color-transparent  hover:opacity-60  mr-1  opacity-30" @click="deleteTab(data)">
         delete
       </AButton>
       <AButton class="dark:hover:border-color-green/60 dark:hover:c-green/80 dark:opacity-80 hover:border-color-green-700/60 hover:c-green-700" @click="submit">
@@ -188,20 +182,20 @@
         >
           Icons
         </button>
-        <div class="" flex="~ 1" border-b="1 solid b-base"/>
+        <div class="" flex="~ 1" border-b="1 solid b-base" />
       </div>
 
       <div class="max-h-40 min-h-40 p-1 select-none" flex="~ col">
         <div>
           <AInput
-            v-model=" icon.searchIconName"
+            v-model="searchIconName"
             outside-class="!border-color-transparent bg-light-700 dark:bg-dark m-1 mb-3"
             placeholder="Search Icon..."
             @input="searchIcon"
           />
         </div>
         <div flex="~ col 1" class="overflow-hidden overflow-y-auto">
-          <ReuseFetchedTemplate v-if="isLoading" ico="i-svg-spinners:gooey-balls-2 " text="loading..."/>
+          <ReuseFetchedTemplate v-if="isLoading" ico="i-svg-spinners:gooey-balls-2 " text="loading..." />
           <div v-else-if="icons.length" gap-8px flex="~ wrap">
             <div
               v-for="(item, index) in icons"
@@ -218,12 +212,19 @@
               />
             </div>
           </div>
-          <ReuseFetchedTemplate v-else ico="i-carbon:magnify" text="No Data"/>
+          <ReuseFetchedTemplate v-else ico="i-carbon:magnify" text="No Data" />
         </div>
       </div>
     </div>
-    <div class="-z-1 fixed po-xy" @click.stop="close" @click.stop.prevent.right="close"/>
+    <div class="-z-1 fixed po-xy" @click.stop="close" @click.stop.prevent.right="close" />
   </div>
+
+  <DefineFetchedTemplate v-slot="{ ico, text }">
+    <div flex="~ 1 col justify-center items-center">
+      <div :class="`${ico}`" class="mb-1 opacity-20 text-8" />
+      <span class="opacity-20 text-12px">{{ text }}</span>
+    </div>
+  </DefineFetchedTemplate>
 </template>
 
 <style lang="scss" scoped>

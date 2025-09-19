@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  import Tab from '@/components/Tab.vue'
+  import Plum from '@/components/Plum.vue'
+  import Header from '@/components/Header.vue'
+  import Search from '@/components/Search.vue'
 </script>
 
 <template>

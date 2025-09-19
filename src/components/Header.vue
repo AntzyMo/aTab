@@ -13,4 +13,3 @@
     @click="toggleDark()"
   />
 </template>
-

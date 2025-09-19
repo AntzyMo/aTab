@@ -13,10 +13,8 @@ export default defineConfig({
     description: 'Antzy的新标签页',
     version: '3.0.0',
     permissions: [
-      'storage'
-    ],
-    host_permissions: [
-      '<all_urls>'
+      'storage',
+      'tabs'
     ],
     icons: {
       128: 'icon/128.png'
