@@ -1,0 +1,22 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## 背景
+这是一个简约的新标签页浏览器插件。
+
+## UI 组件开发规范
+- 使用 Geist UI 作为设计灵感，确保组件风格一致。
+- 使用 Unocss 作为样式框架，确保组件具有响应式设计和良好的可访问性。
+
+### 外部文档
+- Vercel Design System: https://vercel.com/geist (获取设计灵感)
+- Geist UI Examples: https://geist-ui.dev (展示 Vercel 风格组件的社区项目)
+- shadcn/vue: https://context7.com/unovue/shadcn-vue/llms.txt
+- TailwindCSS V4: https://context7.com/context7/tailwindcss/llms.txt
+
+## 常用的开发命令
+- `pnpm dev` - 启动浏览器插件开发服务器
+
+

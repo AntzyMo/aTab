@@ -1,0 +1,8 @@
+---
+description: 项目中查找可用的 UI 组件
+globs: 
+alwaysApply: false
+---
+在项目中可以查找可用的 UI 组件。
+
+组件在 `docs\app\components` 目录下

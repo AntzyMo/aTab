@@ -1,23 +1,36 @@
 {
-  "name": "a-tab",
-  "version": "2.1.0",
-  "description": "",
-  "main": "index.js",
+  "name": "atab",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "manifest.json description",
   "scripts": {
-    "dev": "pnpm -C packages/client run dev",
-    "build": "pnpm -C packages/client run build",
-    "build:exts": "pnpm -C packages/client run build:exts",
-    "release": "bumpp -r "
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "vue-tsc --noEmit",
+    "postinstall": "wxt prepare"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "@iconify-json/carbon": "^1.2.13",
+    "@iconify-json/svg-spinners": "^1.2.4",
+    "@iconify/vue": "^5.0.0",
+    "@unocss/reset": "^66.5.1",
+    "@vueuse/core": "^13.9.0",
+    "vue": "^3.5.21",
+    "vuedraggable": "^4.1.0"
+  },
   "devDependencies": {
-    "@antzy/eslint-config": "^2.0.4",
-    "@iconify/vue": "^4.1.1",
-    "bumpp": "^9.1.1",
-    "eslint": "^8.42.0",
-    "sass": "^1.63.2",
-    "unocss": "^0.53.1"
+    "@antzy/eslint-config": "^3.4.0",
+    "@wxt-dev/module-vue": "^1.0.3",
+    "eslint": "^9.35.0",
+    "sass-embedded": "^1.92.1",
+    "typescript": "^5.9.2",
+    "unocss": "^66.5.1",
+    "vue-tsc": "^3.0.7",
+    "wxt": "^0.20.11"
   }
 }

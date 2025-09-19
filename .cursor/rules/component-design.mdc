@@ -1,0 +1,229 @@
+---
+description: Vue 组件设计与封装规范
+globs: 
+alwaysApply: false
+---
+# Vue 组件设计与封装规范
+
+## 组件架构设计
+
+### 分层结构
+- **原子组件**：单一职责的基础组件（按钮、图标、输入框）
+- **复合组件**：功能性组件（放大镜、颜色选择器、拖拽容器）
+- **容器组件**：组合业务逻辑，管理状态和数据流
+
+### 目录组织
+```
+components/
+├── ComponentName/
+│   ├── index.vue          # 主容器组件
+│   ├── SubComponent.vue   # 子组件
+│   └── constants.ts       # 常量定义
+```
+
+## Props 定义规范
+
+### 基础语法
+```vue
+<script setup lang="ts">
+// 简单 props
+defineProps<{
+  color: string
+  active: boolean
+}>()
+
+// 复杂 props 用接口
+interface Props {
+  positions: Position[]
+  canvasEl: HTMLCanvasElement
+}
+const props = defineProps<Props>()
+</script>
+```
+
+### 可选 Props 与默认值
+```vue
+<script setup lang="ts">
+interface Props {
+  color?: string
+  size?: number
+  active?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  color: '#ffffff',
+  size: 32,
+  active: false
+})
+</script>
+```
+
+## 双向绑定规范
+
+### defineModel 语法
+```vue
+<script setup lang="ts">
+// 基础双向绑定
+const visible = defineModel<boolean>('visible', { default: false })
+const position = defineModel<Position>({ default: { x: 0, y: 0 } })
+
+// 多个 model
+const active = defineModel<number>('active', { default: 0 })
+const colors = defineModel<ColorInfo[]>({ default: [] })
+</script>
+
+<!-- 使用方式 -->
+<!--<Component v-model:active="activeIndex" v-model="colorList" /> -->
+```
+
+## 样式绑定规范
+
+### 条件类名绑定
+```vue
+<template>
+  <div
+    class="w-8 h-8 rounded-full border-2 cursor-crosshair"
+    :class="active
+      ? 'border-blue-400 shadow-xl ring-2 ring-blue-300/50 scale-110'
+      : 'border-white shadow-lg'"
+  >
+</template>
+```
+
+### 动态样式绑定
+```vue
+<template>
+  <div
+    :style="{
+      backgroundColor: color,
+      boxShadow: active 
+        ? '0 4px 12px rgba(59, 130, 246, 0.4)'
+        : '0 2px 8px rgba(0,0,0,0.3)',
+    }"
+  >
+</template>
+```
+
+### 计算样式
+```vue
+<script setup lang="ts">
+const computedStyle = computed(() => ({
+  left: `${position.x - size / 2}px`,
+  top: `${position.y - size - 30}px`,
+  transform: `scale(${active ? 1.1 : 1})`,
+}))
+</script>
+
+<template>
+  <div :style="computedStyle"></div>
+</template>
+```
+
+## 响应式数据管理
+
+### ref 和 reactive 选择原则
+```vue
+<script setup lang="ts">
+// 简单值用 ref
+const visible = ref(false)
+const canvasRef = useTemplateRef('canvas')
+
+// 复杂对象用 reactive
+const position = reactive({ x: 0, y: 0 })
+const config = reactive({
+  size: 80,
+  captureSize: 32,
+  zIndex: 20
+})
+</script>
+```
+
+## 类型定义规范
+
+### Props 类型约束
+```vue
+<script setup lang="ts">
+interface Props {
+  // 基础类型
+  title: string
+  count: number
+  visible: boolean
+  
+  // 数组类型
+  items: string[]
+  positions: Position[]
+  
+  // 函数类型
+  onUpdate?: (value: string) => void
+  
+  // 联合类型
+  size: 'small' | 'medium' | 'large'
+}
+</script>
+```
+
+### Emit 类型约束
+```vue
+<script setup lang="ts">
+const emit = defineEmits<{
+  change: [id: number] // 具名元组语法
+  update: [value: string]
+}>()
+</script>
+```
+
+### 图标库使用
+```vue
+<script setup lang="ts">
+import { Plus, Search, Download } from 'lucide-vue-next'
+</script>
+
+<template>
+  <Plus
+    :size="16"
+    :stroke-width="1.5"
+    class='text-gray-600'
+    :class="{ 'text-white': active }"
+  />
+</template>
+```
+
+## 组件组合模式
+
+### 插槽组合
+```vue
+<!-- 父组件 -->
+<template>
+  <Magnifier v-model:visible="visible" v-model="position">
+    <UseDraggable @move="handleMove">
+      <Dot :color="color" :active="active" />
+    </UseDraggable>
+  </Magnifier>
+</template>
+
+<!-- 子组件 -->
+<template>
+  <div class="magnifier-container">
+    <slot />
+    <!-- 其他内容 -->
+  </div>
+</template>
+```
+
+
+## 开发规则
+
+1. **类型安全**：始终使用 TypeScript 约束 props 和数据
+2. **单一职责**：每个组件只负责一个明确的功能  
+3. **双向绑定**：优先使用 defineModel 而不是 emit
+4. **样式一致**：使用 Tailwind 条件类名绑定
+5. **组件组合**：通过插槽实现组件嵌套和复用
+
+
+
+
+
+
+
+
+
